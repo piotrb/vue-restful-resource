@@ -1,0 +1,8 @@
+{
+  "main": "index.js",
+  "version": "0.0.1",
+  "name": "vue-restful-resource",
+  "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.11"
+  }
+}

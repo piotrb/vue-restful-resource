@@ -1,8 +1,26 @@
 {
-  "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "vue-restful-resource",
+
+  "main": "src/index.js",
+  "module": "dist/bundle.js",
+
+  "scripts": {
+    "build": "rollup -c"
+  },
+
   "dependencies": {
-    "bootstrap-vue": "^2.0.0-rc.11"
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "qs": "^6.5.2"
+  },
+
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "pug": "^2.0.3",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.5",
+    "rollup-plugin-vue": "^4.3.2",
+    "vue-template-compiler": "^2.5.17"
   }
 }

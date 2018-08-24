@@ -1,0 +1,27 @@
+import VuePlugin from 'rollup-plugin-vue'
+import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
+
+export default {
+  entry: "src/index.js",
+  plugins: [
+    VuePlugin(
+      /* VuePluginOptions */
+    ),
+    babel(
+      {
+        plugins: [
+          "transform-class-properties",
+        ],
+      }
+    ),
+    commonjs({
+      extensions: [ '.js', '.vue' ],
+    }),
+  ],
+  external: [ 'qs' ],
+  output: {
+    file: 'dist/bundle.js',
+    format: 'cjs',
+  }
+};

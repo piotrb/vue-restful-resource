@@ -38,6 +38,19 @@ export default class Resource {
     }, runtimeOptions);
   }
 
+  async update(id, data, runtimeOptions) {
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`);
+    let body = {};
+    data._ = "_";
+    body[this.resouceName] = data;
+    return this._execute({
+      url: url,
+      method: "put",
+      body: JSON.stringify(body),
+      headers: Resource.commonHeaders,
+    }, runtimeOptions);
+  }
+
   async delete(id, runtimeOptions) {
     let url = this._buildUrl(`/${encodeURIComponent(id)}`);
     return this._execute({

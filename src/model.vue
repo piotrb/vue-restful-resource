@@ -43,6 +43,9 @@
       create(data) {
         return this._resource.create(data, {statusTo: [this, 'formStatus'], throwErrors: false});
       },
+      update(id, data) {
+        return this._resource.update(id, data, {statusTo: [this, 'formStatus'], throwErrors: false});
+      },
       delete(id) {
         return this._resource.delete(id, {statusTo: [this, 'formStatus'], throwErrors: false});
       }

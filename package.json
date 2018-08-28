@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "vue-restful-resource",
   "main": "src/index.js",
   "module": "dist/bundle.js",

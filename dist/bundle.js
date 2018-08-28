@@ -283,11 +283,11 @@ class Resource {
   async create(data, runtimeOptions) {
     let url = this._buildUrl();
     let body = {};
-    data._ = "_";
+    data._ = '_';
     body[this.resouceName] = data;
     return this._execute({
       url: url,
-      method: "post",
+      method: 'post',
       body: JSON.stringify(body),
       headers: Resource.commonHeaders
     }, runtimeOptions);
@@ -296,11 +296,11 @@ class Resource {
   async update(id, data, runtimeOptions) {
     let url = this._buildUrl(`/${encodeURIComponent(id)}`);
     let body = {};
-    data._ = "_";
+    data._ = '_';
     body[this.resouceName] = data;
     return this._execute({
       url: url,
-      method: "put",
+      method: 'put',
       body: JSON.stringify(body),
       headers: Resource.commonHeaders
     }, runtimeOptions);
@@ -310,7 +310,7 @@ class Resource {
     let url = this._buildUrl(`/${encodeURIComponent(id)}`);
     return this._execute({
       url: url,
-      method: "delete",
+      method: 'delete',
       headers: Resource.commonHeaders
     }, runtimeOptions);
   }
@@ -348,7 +348,7 @@ class Resource {
       url += relative;
     }
     if (options) {
-      url += "?" + qs.stringify(options);
+      url += '?' + qs.stringify(options);
     }
     return url;
   }
@@ -379,11 +379,12 @@ class Resource {
       this._signalStatus({ error: errorInfo, busy: false }, runtimeOptions);
 
       if (runtimeOptions.throwErrors) {
-        throw new ResourceError("request failed", errorInfo);
+        throw new ResourceError('request failed', errorInfo);
       }
     }
   }
-}Resource.commonHeaders = { "Content-Type": "application/json" };
+}
+Resource.commonHeaders = { 'Content-Type': 'application/json' };
 
 //
 
@@ -410,7 +411,7 @@ var script$2 = {
   },
   async mounted() {
     let data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
-    this.$emit("update", data);
+    this.$emit('update', data);
   },
   data() {
     return {
@@ -420,6 +421,9 @@ var script$2 = {
     };
   },
   methods: {
+    get(id) {
+      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false });
+    },
     create(data) {
       return this._resource.create(data, { statusTo: [this, 'formStatus'], throwErrors: false });
     },
@@ -432,7 +436,7 @@ var script$2 = {
   },
   watch: {
     status() {
-      this.$emit("status", this.status);
+      this.$emit('status', this.status);
     }
   }
 };

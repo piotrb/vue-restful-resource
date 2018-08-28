@@ -19,15 +19,18 @@ export default {
     path: {
       required: true,
     },
-    id: {
-      required: true,
+    filter: {
+      default() {
+        return {}
+      },
     },
   },
   created() {
     this._resource = new Resource(this.name, this.path)
   },
   async mounted() {
-    await this.refresh()
+    let data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
+    this.$emit('update', data)
   },
   data() {
     return {
@@ -37,16 +40,17 @@ export default {
     }
   },
   methods: {
-    async refresh() {
-      let data = await this._resource.get(this.id, { statusTo: [this, 'status'], throwErrors: false })
-      this.$emit('update', data)
+    get(id) {
+      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false })
     },
-    async update(data) {
-      let record = await this._resource.update(this.id, data, { statusTo: [this, 'formStatus'], throwErrors: false })
-      this.$emit('update', record)
+    create(data) {
+      return this._resource.create(data, { statusTo: [this, 'formStatus'], throwErrors: false })
     },
-    delete() {
-      return this._resource.delete(this.id, { statusTo: [this, 'formStatus'], throwErrors: false })
+    update(id, data) {
+      return this._resource.update(id, data, { statusTo: [this, 'formStatus'], throwErrors: false })
+    },
+    delete(id) {
+      return this._resource.delete(id, { statusTo: [this, 'formStatus'], throwErrors: false })
     },
   },
   watch: {

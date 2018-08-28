@@ -10,7 +10,7 @@ module.exports = {
   semi: false,
 
   // Print trailing commas where valid in ES5 (objects, arrays, etc.)
-  trailingComma: 'es6',
+  trailingComma: 'es5',
 
   // Include parentheses around a sole arrow function parameter
   arrowParens: 'always',

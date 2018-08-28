@@ -1,6 +1,6 @@
 <template lang="pug">
-  div(v-if="status")
-    div(v-if="status.start")
+  div.status(v-if="status")
+    b-alert.loading(show variant="info" v-if="status.start")
       | Loading {{label}} ...
       font-awesome-icon(icon="spinner" pulse)
     div(v-if="status.ready")
@@ -29,3 +29,13 @@ export default {
   },
 }
 </script>
+<style scoped>
+.status {
+  position: relative;
+}
+.status .loading {
+  position: absolute;
+  z-index: 99;
+}
+</style>
+

@@ -19,7 +19,7 @@ export default {
       extensions: [ '.js', '.vue' ],
     }),
   ],
-  external: [ 'qs' ],
+  external: [ 'qs', 'vue' ],
   output: {
     file: 'dist/bundle.js',
     format: 'cjs',

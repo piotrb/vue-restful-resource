@@ -6,14 +6,14 @@
         div(v-else) {{fieldName}} {{fieldError}}
 </template>
 <script>
-  export default {
-    props: {
-      errors: {
-        required: true,
-      }
+export default {
+  props: {
+    errors: {
+      required: true,
     },
-    data() {
-      return {}
-    }
-  }
+  },
+  data() {
+    return {}
+  },
+}
 </script>

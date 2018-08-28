@@ -17,15 +17,15 @@
         pre {{status}}
 </template>
 <script>
-  export default {
-    props: {
-      status: {
-        required: true,
-      },
-      label: {}
+export default {
+  props: {
+    status: {
+      required: true,
     },
-    data() {
-      return {};
-    },
-  };
+    label: {},
+  },
+  data() {
+    return {}
+  },
+}
 </script>

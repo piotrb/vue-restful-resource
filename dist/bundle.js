@@ -126,171 +126,6 @@ function __vue_create_injector__() {
 
 var ModelError = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, __vue_create_injector__, undefined);
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var script$1 = {
-  props: {
-    status: {
-      required: true
-    },
-    label: {}
-  },
-  data() {
-    return {};
-  }
-};
-
-/* script */
-const __vue_script__$1 = script$1;
-
-/* template */
-var __vue_render__$1 = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _vm.status ? _c("div", { staticClass: "status" }, [_vm.status.start ? _c("b-alert", {
-    staticClass: "loading",
-    attrs: { show: "show", variant: "info" }
-  }, [_vm._v("Loading " + _vm._s(_vm.label) + " ..."), _c("font-awesome-icon", {
-    attrs: { icon: "spinner", pulse: "pulse" }
-  })], 1) : _vm._e(), _vm.status.ready ? _c("div", [_vm._t("ready")], 2) : _vm._e(), _vm.status.error ? _c("div", [_vm.status.error.status === 422 ? [_c("model-error", {
-    attrs: { errors: _vm.status.error.body }
-  })] : _vm.status.error.status === 500 ? [_vm.status.error.body ? [_c("b-alert", {
-    attrs: { show: "show", variant: "danger" }
-  }, [_vm._v(_vm._s(_vm.status.error.body.error))])] : [_c("b-alert", {
-    attrs: { show: "show", variant: "danger" }
-  }, [_vm._v("Something went wrong: Server returned Error 500")])]] : [_c("pre", [_vm._v(_vm._s(_vm.status))])]], 2) : _vm._e()], 1) : _vm._e();
-};
-var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
-
-/* style */
-const __vue_inject_styles__$1 = function (inject) {
-  if (!inject) return;
-  inject("data-v-3814a1f0_0", { source: "\n.status[data-v-3814a1f0] {\n  position: relative;\n}\n.status .loading[data-v-3814a1f0] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAgCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n\n"] }, media: undefined });
-};
-/* scoped */
-const __vue_scope_id__$1 = "data-v-3814a1f0";
-/* module identifier */
-const __vue_module_identifier__$1 = undefined;
-/* functional template */
-const __vue_is_functional_template__$1 = false;
-/* component normalizer */
-function __vue_normalize__$1(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script === 'function' ? script.options : script) || {};
-
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue";
-
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
-
-    if (functional) component.functional = true;
-  }
-
-  component._scopeId = scope;
-
-  {
-    let hook;
-    if (style) {
-      hook = function (context) {
-        style.call(this, createInjector(context));
-      };
-    }
-
-    if (hook !== undefined) {
-      if (component.functional) {
-        // register for functional component in vue file
-        const originalRender = component.render;
-        component.render = function renderWithStyleInjection(h, context) {
-          hook.call(context);
-          return originalRender(h, context);
-        };
-      } else {
-        // inject component registration as beforeCreate hook
-        const existing = component.beforeCreate;
-        component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-      }
-    }
-  }
-
-  return component;
-}
-/* style inject */
-function __vue_create_injector__$1() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__$1.styles || (__vue_create_injector__$1.styles = {});
-  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-
-  return function addStyle(id, css) {
-    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
-
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-    if (!style.ids.includes(id)) {
-      let code = css.source;
-      let index = style.ids.length;
-
-      style.ids.push(id);
-
-      if (isOldIE) {
-        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-      }
-
-      if (!style.element) {
-        const el = style.element = document.createElement('style');
-        el.type = 'text/css';
-
-        if (css.media) el.setAttribute('media', css.media);
-        if (isOldIE) {
-          el.setAttribute('data-group', group);
-          el.setAttribute('data-next-index', '0');
-        }
-
-        head.appendChild(el);
-      }
-
-      if (isOldIE) {
-        index = parseInt(style.element.getAttribute('data-next-index'));
-        style.element.setAttribute('data-next-index', index + 1);
-      }
-
-      if (style.element.styleSheet) {
-        style.parts.push(code);
-        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
-      } else {
-        const textNode = document.createTextNode(code);
-        const nodes = style.element.childNodes;
-        if (nodes[index]) style.element.removeChild(nodes[index]);
-        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
-      }
-    }
-  };
-}
-/* style inject SSR */
-
-var ResourceStatus = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, __vue_create_injector__$1, undefined);
-
 class ResourceError extends Error {
   constructor(message, errorInfo) {
     super(message);
@@ -423,10 +258,7 @@ Resource.commonHeaders = { 'Content-Type': 'application/json' };
 
 //
 
-var script$2 = {
-  components: {
-    ResourceStatus
-  },
+var script$1 = {
   props: {
     label: {},
     name: {
@@ -473,32 +305,32 @@ var script$2 = {
 };
 
 /* script */
-const __vue_script__$2 = script$2;
+const __vue_script__$1 = script$1;
 
 /* template */
-var __vue_render__$2 = function () {
+var __vue_render__$1 = function () {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", [_c("resource-status", {
+  return _c("div", [_c("rr-resource-status", {
     attrs: { status: _vm.status, label: _vm.label }
-  }), _c("resource-status", {
+  }), _c("rr-resource-status", {
     attrs: { status: _vm.formStatus, label: _vm.label }
   })], 1);
 };
-var __vue_staticRenderFns__$2 = [];
-__vue_render__$2._withStripped = true;
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
 
 /* style */
-const __vue_inject_styles__$2 = undefined;
+const __vue_inject_styles__$1 = undefined;
 /* scoped */
-const __vue_scope_id__$2 = undefined;
+const __vue_scope_id__$1 = undefined;
 /* module identifier */
-const __vue_module_identifier__$2 = undefined;
+const __vue_module_identifier__$1 = undefined;
 /* functional template */
-const __vue_is_functional_template__$2 = false;
+const __vue_is_functional_template__$1 = false;
 /* component normalizer */
-function __vue_normalize__$2(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
+function __vue_normalize__$1(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
   const component = (typeof script === 'function' ? script.options : script) || {};
 
   // For security concerns, we use only base name in production mode.
@@ -513,6 +345,171 @@ function __vue_normalize__$2(template, style, script, scope, functional, moduleI
   }
 
   component._scopeId = scope;
+
+  return component;
+}
+/* style inject */
+function __vue_create_injector__$1() {
+  const head = document.head || document.getElementsByTagName('head')[0];
+  const styles = __vue_create_injector__$1.styles || (__vue_create_injector__$1.styles = {});
+  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+  return function addStyle(id, css) {
+    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
+
+    const group = isOldIE ? css.media || 'default' : id;
+    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+    if (!style.ids.includes(id)) {
+      let code = css.source;
+      let index = style.ids.length;
+
+      style.ids.push(id);
+
+      if (isOldIE) {
+        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+      }
+
+      if (!style.element) {
+        const el = style.element = document.createElement('style');
+        el.type = 'text/css';
+
+        if (css.media) el.setAttribute('media', css.media);
+        if (isOldIE) {
+          el.setAttribute('data-group', group);
+          el.setAttribute('data-next-index', '0');
+        }
+
+        head.appendChild(el);
+      }
+
+      if (isOldIE) {
+        index = parseInt(style.element.getAttribute('data-next-index'));
+        style.element.setAttribute('data-next-index', index + 1);
+      }
+
+      if (style.element.styleSheet) {
+        style.parts.push(code);
+        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
+      } else {
+        const textNode = document.createTextNode(code);
+        const nodes = style.element.childNodes;
+        if (nodes[index]) style.element.removeChild(nodes[index]);
+        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
+      }
+    }
+  };
+}
+/* style inject SSR */
+
+var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, __vue_create_injector__$1, undefined);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var script$2 = {
+  props: {
+    status: {
+      required: true
+    },
+    label: {}
+  },
+  data() {
+    return {};
+  }
+};
+
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$2 = function () {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _vm.status ? _c("div", { staticClass: "status" }, [_vm.status.start ? _c("b-alert", {
+    staticClass: "loading",
+    attrs: { show: "show", variant: "info" }
+  }, [_vm._v("Loading " + _vm._s(_vm.label) + " ..."), _c("font-awesome-icon", {
+    attrs: { icon: "spinner", pulse: "pulse" }
+  })], 1) : _vm._e(), _vm.status.ready ? _c("div", [_vm._t("ready")], 2) : _vm._e(), _vm.status.error ? _c("div", [_vm.status.error.status === 422 ? [_c("rr-model-error", {
+    attrs: { errors: _vm.status.error.body }
+  })] : _vm.status.error.status === 500 ? [_vm.status.error.body ? [_c("b-alert", {
+    attrs: { show: "show", variant: "danger" }
+  }, [_vm._v(_vm._s(_vm.status.error.body.error))])] : [_c("b-alert", {
+    attrs: { show: "show", variant: "danger" }
+  }, [_vm._v("Something went wrong: Server returned Error 500")])]] : [_c("pre", [_vm._v(_vm._s(_vm.status))])]], 2) : _vm._e()], 1) : _vm._e();
+};
+var __vue_staticRenderFns__$2 = [];
+__vue_render__$2._withStripped = true;
+
+/* style */
+const __vue_inject_styles__$2 = function (inject) {
+  if (!inject) return;
+  inject("data-v-6d8edf0a_0", { source: "\n.status[data-v-6d8edf0a] {\n  position: relative;\n}\n.status .loading[data-v-6d8edf0a] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAgCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n\n"] }, media: undefined });
+};
+/* scoped */
+const __vue_scope_id__$2 = "data-v-6d8edf0a";
+/* module identifier */
+const __vue_module_identifier__$2 = undefined;
+/* functional template */
+const __vue_is_functional_template__$2 = false;
+/* component normalizer */
+function __vue_normalize__$2(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
+  const component = (typeof script === 'function' ? script.options : script) || {};
+
+  // For security concerns, we use only base name in production mode.
+  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue";
+
+  if (!component.render) {
+    component.render = template.render;
+    component.staticRenderFns = template.staticRenderFns;
+    component._compiled = true;
+
+    if (functional) component.functional = true;
+  }
+
+  component._scopeId = scope;
+
+  {
+    let hook;
+    if (style) {
+      hook = function (context) {
+        style.call(this, createInjector(context));
+      };
+    }
+
+    if (hook !== undefined) {
+      if (component.functional) {
+        // register for functional component in vue file
+        const originalRender = component.render;
+        component.render = function renderWithStyleInjection(h, context) {
+          hook.call(context);
+          return originalRender(h, context);
+        };
+      } else {
+        // inject component registration as beforeCreate hook
+        const existing = component.beforeCreate;
+        component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+      }
+    }
+  }
 
   return component;
 }
@@ -570,14 +567,11 @@ function __vue_create_injector__$2() {
 }
 /* style inject SSR */
 
-var Model = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__$2, undefined);
+var ResourceStatus = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__$2, undefined);
 
 //
 
 var script$3 = {
-  components: {
-    ResourceStatus
-  },
   props: {
     label: {},
     name: {
@@ -635,9 +629,9 @@ var __vue_render__$3 = function () {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", [_c("resource-status", {
+  return _c("div", [_c("rr-resource-status", {
     attrs: { status: _vm.status, label: _vm.label }
-  }), _c("resource-status", {
+  }), _c("rr-resource-status", {
     attrs: { status: _vm.formStatus, label: _vm.label }
   })], 1);
 };

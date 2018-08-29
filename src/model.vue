@@ -1,16 +1,12 @@
 <template lang="pug">
   div
-    resource-status(:status="status", :label="label")
-    resource-status(:status="formStatus", :label="label")
+    rr-resource-status(:status="status", :label="label")
+    rr-resource-status(:status="formStatus", :label="label")
 </template>
 <script>
-import ResourceStatus from './resource.status'
 import Resource from './resource'
 
 export default {
-  components: {
-    ResourceStatus,
-  },
   props: {
     label: {},
     name: {

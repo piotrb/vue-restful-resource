@@ -7,7 +7,7 @@
       slot(name="ready")
     div(v-if="status.error")
       template(v-if="status.error.status === 422")
-        model-error(:errors="status.error.body")
+        rr-model-error(:errors="status.error.body")
       template(v-else-if="status.error.status === 500")
         template(v-if="status.error.body")
           b-alert(show variant="danger") {{status.error.body.error}}

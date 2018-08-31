@@ -44,6 +44,9 @@ export default {
     delete() {
       return this._resource.delete(this.id, { statusTo: [this, 'formStatus'], throwErrors: false })
     },
+    member_get(id, action) {
+      return this._resource.member_action(this.id, action, { statusTo: [this, 'formStatus'], throwErrors: false })
+    },
   },
   watch: {
     status() {

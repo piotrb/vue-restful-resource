@@ -1,11 +1,8 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var qs = _interopDefault(require('qs'));
-var Vue = _interopDefault(require('vue'));
 
 //
 //
@@ -71,60 +68,10 @@ function __vue_normalize__(template, style, script$$1, scope, functional, module
   return component;
 }
 /* style inject */
-function __vue_create_injector__() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
-  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
-  return function addStyle(id, css) {
-    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
-
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-    if (!style.ids.includes(id)) {
-      let code = css.source;
-      let index = style.ids.length;
-
-      style.ids.push(id);
-
-      if (isOldIE) {
-        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-      }
-
-      if (!style.element) {
-        const el = style.element = document.createElement('style');
-        el.type = 'text/css';
-
-        if (css.media) el.setAttribute('media', css.media);
-        if (isOldIE) {
-          el.setAttribute('data-group', group);
-          el.setAttribute('data-next-index', '0');
-        }
-
-        head.appendChild(el);
-      }
-
-      if (isOldIE) {
-        index = parseInt(style.element.getAttribute('data-next-index'));
-        style.element.setAttribute('data-next-index', index + 1);
-      }
-
-      if (style.element.styleSheet) {
-        style.parts.push(code);
-        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
-      } else {
-        const textNode = document.createTextNode(code);
-        const nodes = style.element.childNodes;
-        if (nodes[index]) style.element.removeChild(nodes[index]);
-        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
-      }
-    }
-  };
-}
 /* style inject SSR */
 
-var ModelError = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, __vue_create_injector__, undefined);
+var ModelError = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
 
 class ResourceError extends Error {
   constructor(message, errorInfo) {
@@ -187,6 +134,14 @@ class Resource {
 
   async get(id, runtimeOptions) {
     let url = this._buildUrl(`/${encodeURIComponent(id)}`);
+    return this._execute({
+      url: url,
+      headers: Resource.commonHeaders
+    }, runtimeOptions);
+  }
+
+  async member_get(id, action, runtimeOptions) {
+    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`);
     return this._execute({
       url: url,
       headers: Resource.commonHeaders
@@ -295,6 +250,9 @@ var script$1 = {
     },
     delete() {
       return this._resource.delete(this.id, { statusTo: [this, 'formStatus'], throwErrors: false });
+    },
+    member_get(id, action) {
+      return this._resource.member_action(this.id, action, { statusTo: [this, 'formStatus'], throwErrors: false });
     }
   },
   watch: {
@@ -349,60 +307,10 @@ function __vue_normalize__$1(template, style, script, scope, functional, moduleI
   return component;
 }
 /* style inject */
-function __vue_create_injector__$1() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__$1.styles || (__vue_create_injector__$1.styles = {});
-  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
-  return function addStyle(id, css) {
-    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
-
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-    if (!style.ids.includes(id)) {
-      let code = css.source;
-      let index = style.ids.length;
-
-      style.ids.push(id);
-
-      if (isOldIE) {
-        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-      }
-
-      if (!style.element) {
-        const el = style.element = document.createElement('style');
-        el.type = 'text/css';
-
-        if (css.media) el.setAttribute('media', css.media);
-        if (isOldIE) {
-          el.setAttribute('data-group', group);
-          el.setAttribute('data-next-index', '0');
-        }
-
-        head.appendChild(el);
-      }
-
-      if (isOldIE) {
-        index = parseInt(style.element.getAttribute('data-next-index'));
-        style.element.setAttribute('data-next-index', index + 1);
-      }
-
-      if (style.element.styleSheet) {
-        style.parts.push(code);
-        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
-      } else {
-        const textNode = document.createTextNode(code);
-        const nodes = style.element.childNodes;
-        if (nodes[index]) style.element.removeChild(nodes[index]);
-        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
-      }
-    }
-  };
-}
 /* style inject SSR */
 
-var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, __vue_create_injector__$1, undefined);
+var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
 
 //
 //
@@ -514,9 +422,9 @@ function __vue_normalize__$2(template, style, script, scope, functional, moduleI
   return component;
 }
 /* style inject */
-function __vue_create_injector__$2() {
+function __vue_create_injector__() {
   const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__$2.styles || (__vue_create_injector__$2.styles = {});
+  const styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
   const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
   return function addStyle(id, css) {
@@ -567,7 +475,7 @@ function __vue_create_injector__$2() {
 }
 /* style inject SSR */
 
-var ResourceStatus = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__$2, undefined);
+var ResourceStatus = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__, undefined);
 
 //
 
@@ -666,68 +574,20 @@ function __vue_normalize__$3(template, style, script, scope, functional, moduleI
   return component;
 }
 /* style inject */
-function __vue_create_injector__$3() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__$3.styles || (__vue_create_injector__$3.styles = {});
-  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
-  return function addStyle(id, css) {
-    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
-
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-    if (!style.ids.includes(id)) {
-      let code = css.source;
-      let index = style.ids.length;
-
-      style.ids.push(id);
-
-      if (isOldIE) {
-        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-      }
-
-      if (!style.element) {
-        const el = style.element = document.createElement('style');
-        el.type = 'text/css';
-
-        if (css.media) el.setAttribute('media', css.media);
-        if (isOldIE) {
-          el.setAttribute('data-group', group);
-          el.setAttribute('data-next-index', '0');
-        }
-
-        head.appendChild(el);
-      }
-
-      if (isOldIE) {
-        index = parseInt(style.element.getAttribute('data-next-index'));
-        style.element.setAttribute('data-next-index', index + 1);
-      }
-
-      if (style.element.styleSheet) {
-        style.parts.push(code);
-        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
-      } else {
-        const textNode = document.createTextNode(code);
-        const nodes = style.element.childNodes;
-        if (nodes[index]) style.element.removeChild(nodes[index]);
-        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
-      }
-    }
-  };
-}
 /* style inject SSR */
 
-var Collection = __vue_normalize__$3({ render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, __vue_create_injector__$3, undefined);
+var Collection = __vue_normalize__$3({ render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
 
-Vue.component('rr-model', Model);
-Vue.component('rr-collection', Collection);
-Vue.component('rr-resource-status', ResourceStatus);
-Vue.component('rr-model-error', ModelError);
+// import Vue from 'vue'
 
-exports.ModelError = ModelError;
-exports.Model = Model;
-exports.Resource = Resource;
-exports.ResourceStatus = ResourceStatus;
-exports.Collection = Collection;
+function install(Vue, options) {
+  Vue.component('rr-model', Model);
+  Vue.component('rr-collection', Collection);
+  Vue.component('rr-resource-status', ResourceStatus);
+  Vue.component('rr-model-error', ModelError);
+}
+
+var index = { ModelError, Model, Resource, ResourceStatus, Collection, install };
+
+module.exports = index;

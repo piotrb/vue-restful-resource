@@ -80,6 +80,17 @@ export default class Resource {
     )
   }
 
+  async member_get(id, action, runtimeOptions) {
+    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`)
+    return this._execute(
+      {
+        url: url,
+        headers: Resource.commonHeaders,
+      },
+      runtimeOptions
+    )
+  }
+
   async _execute(options, runtimeOptions = {}) {
     this._signalStatus({ start: true, busy: true }, runtimeOptions)
     let result = await fetch(options.url, options)

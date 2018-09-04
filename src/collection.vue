@@ -12,9 +12,6 @@ export default {
     name: {
       required: true,
     },
-    path: {
-      required: true,
-    },
     filter: {
       default() {
         return {}
@@ -22,14 +19,24 @@ export default {
     },
   },
   created() {
-    this._resource = new Resource(this.name, this.path)
+    try {
+      this._resource = this.$resource(this.name)
+    } catch (e) {
+      this.status = {
+        error: {
+          status: 'error',
+          error: e.message,
+        },
+      }
+    }
   },
   async mounted() {
-    let data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
-    this.$emit('update', data)
+    this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
+    this.$emit('update', this.data)
   },
   data() {
     return {
+      data: [],
       status: {},
       formStatus: {},
       _resource: null,
@@ -37,16 +44,49 @@ export default {
   },
   methods: {
     get(id) {
-      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false })
+      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter })
     },
-    create(data) {
-      return this._resource.create(data, { statusTo: [this, 'formStatus'], throwErrors: false })
+    async create(data) {
+      let result = await this._resource.create(data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter,
+      })
+      if (this.formStatus.ready) {
+        let index = this.data.findIndex((item) => item.id === result.id)
+        if (index >= 0) {
+          this.$set(this.data, index, result)
+        } else {
+          this.data.push(result)
+        }
+        this.$emit('update', this.data)
+      }
+      return result
     },
-    update(id, data) {
-      return this._resource.update(id, data, { statusTo: [this, 'formStatus'], throwErrors: false })
+    async update(id, data) {
+      let result = await this._resource.update(id, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter,
+      })
+      if (this.formStatus.ready) {
+        let index = this.data.findIndex((item) => item.id === id)
+        this.$set(this.data, index, result)
+      }
+      return result
     },
-    delete(id) {
-      return this._resource.delete(id, { statusTo: [this, 'formStatus'], throwErrors: false })
+    async delete(id) {
+      let result = await this._resource.delete(id, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter,
+      })
+      if (result === null || !result.error) {
+        let index = this.data.findIndex((item) => item.id === id)
+        this.$delete(this.data, index)
+      }
+      this.$emit('update', this.data)
+      return result
     },
   },
   watch: {

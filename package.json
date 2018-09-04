@@ -1,5 +1,5 @@
 {
-  "version": "0.0.3",
+  "version": "0.1.0",
   "name": "vue-restful-resource",
   "main": "src/index.js",
   "module": "dist/bundle.js",
@@ -11,14 +11,21 @@
     "qs": "^6.5.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^1.0.0",
     "pug": "^2.0.3",
     "rollup": "^0.65.0",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.5",
     "rollup-plugin-vue": "^4.3.2",
     "vue": "^2.5.17",
+    "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17"
   }
 }

@@ -26,7 +26,9 @@ export default class Resource {
   }
 
   async create(data, runtimeOptions) {
-    let url = this._buildUrl()
+    let queryParams = runtimeOptions['queryParams']
+    delete runtimeOptions['queryParams']
+    let url = this._buildUrl(undefined, queryParams)
     let body = {}
     data._ = '_'
     body[this.resouceName] = data
@@ -42,7 +44,9 @@ export default class Resource {
   }
 
   async update(id, data, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`)
+    let queryParams = runtimeOptions['queryParams']
+    delete runtimeOptions['queryParams']
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
     let body = {}
     data._ = '_'
     body[this.resouceName] = data
@@ -58,7 +62,9 @@ export default class Resource {
   }
 
   async delete(id, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`)
+    let queryParams = runtimeOptions['queryParams']
+    delete runtimeOptions['queryParams']
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
     return this._execute(
       {
         url: url,
@@ -70,7 +76,9 @@ export default class Resource {
   }
 
   async get(id, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`)
+    let queryParams = runtimeOptions['queryParams']
+    delete runtimeOptions['queryParams']
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
     return this._execute(
       {
         url: url,

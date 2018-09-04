@@ -13,6 +13,8 @@
           b-alert(show variant="danger") {{status.error.body.error}}
         template(v-else)
           b-alert(show variant="danger") Something went wrong: Server returned Error 500
+      template(v-else-if="status.error.status === 'error'")
+        b-alert(show variant="danger") {{status.error.error}}
       template(v-else)
         pre {{status}}
 </template>

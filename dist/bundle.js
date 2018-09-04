@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var qs = _interopDefault(require('qs'));
@@ -73,6 +75,140 @@ function __vue_normalize__(template, style, script$$1, scope, functional, module
 
 var ModelError = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
 
+//
+//
+//
+//
+//
+
+var script$1 = {
+  props: {
+    label: {},
+    name: {
+      required: true
+    },
+    id: {
+      required: true
+    },
+    action: {
+      default: null
+    },
+    filter: {
+      default() {
+        return {};
+      }
+    }
+  },
+  created() {
+    this._resource = this.$resource(this.name);
+  },
+  async mounted() {
+    await this.refresh();
+  },
+  data() {
+    return {
+      status: {},
+      formStatus: {},
+      _resource: null
+    };
+  },
+  methods: {
+    async refresh() {
+      let data;
+      if (this.action) {
+        data = await this._resource.member_get(this.id, this.action, {
+          statusTo: [this, 'status'],
+          throwErrors: false,
+          queryParams: this.filter
+        });
+      } else {
+        data = await this._resource.get(this.id, {
+          statusTo: [this, 'status'],
+          throwErrors: false,
+          queryParams: this.filter
+        });
+      }
+      this.$emit('update', data);
+    },
+    async update(data) {
+      if (this.action) {
+        throw new Error('update not supported for custom actions');
+      }
+      let record = await this._resource.update(this.id, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+      this.$emit('update', record);
+    },
+    delete() {
+      if (this.action) {
+        throw new Error('delete not supported for custom actions');
+      }
+      return this._resource.delete(this.id, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+    }
+  },
+  watch: {
+    status() {
+      this.$emit('status', this.status);
+    }
+  }
+};
+
+/* script */
+const __vue_script__$1 = script$1;
+
+/* template */
+var __vue_render__$1 = function () {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", [_c("rr-resource-status", {
+    attrs: { status: _vm.status, label: _vm.label }
+  }), _c("rr-resource-status", {
+    attrs: { status: _vm.formStatus, label: _vm.label }
+  })], 1);
+};
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
+
+/* style */
+const __vue_inject_styles__$1 = undefined;
+/* scoped */
+const __vue_scope_id__$1 = undefined;
+/* module identifier */
+const __vue_module_identifier__$1 = undefined;
+/* functional template */
+const __vue_is_functional_template__$1 = false;
+/* component normalizer */
+function __vue_normalize__$1(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
+  const component = (typeof script === 'function' ? script.options : script) || {};
+
+  // For security concerns, we use only base name in production mode.
+  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/model.vue";
+
+  if (!component.render) {
+    component.render = template.render;
+    component.staticRenderFns = template.staticRenderFns;
+    component._compiled = true;
+
+    if (functional) component.functional = true;
+  }
+
+  component._scopeId = scope;
+
+  return component;
+}
+/* style inject */
+
+/* style inject SSR */
+
+var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
+
 class ResourceError extends Error {
   constructor(message, errorInfo) {
     super(message);
@@ -98,7 +234,9 @@ class Resource {
   }
 
   async create(data, runtimeOptions) {
-    let url = this._buildUrl();
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(undefined, queryParams);
     let body = {};
     data._ = '_';
     body[this.resouceName] = data;
@@ -111,7 +249,9 @@ class Resource {
   }
 
   async update(id, data, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`);
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
     let body = {};
     data._ = '_';
     body[this.resouceName] = data;
@@ -124,7 +264,9 @@ class Resource {
   }
 
   async delete(id, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`);
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
     return this._execute({
       url: url,
       method: 'delete',
@@ -133,7 +275,9 @@ class Resource {
   }
 
   async get(id, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`);
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
     return this._execute({
       url: url,
       headers: Resource.commonHeaders
@@ -212,106 +356,7 @@ class Resource {
 Resource.commonHeaders = { 'Content-Type': 'application/json' };
 
 //
-
-var script$1 = {
-  props: {
-    label: {},
-    name: {
-      required: true
-    },
-    path: {
-      required: true
-    },
-    id: {
-      required: true
-    }
-  },
-  created() {
-    this._resource = new Resource(this.name, this.path);
-  },
-  async mounted() {
-    await this.refresh();
-  },
-  data() {
-    return {
-      status: {},
-      formStatus: {},
-      _resource: null
-    };
-  },
-  methods: {
-    async refresh() {
-      let data = await this._resource.get(this.id, { statusTo: [this, 'status'], throwErrors: false });
-      this.$emit('update', data);
-    },
-    async update(data) {
-      let record = await this._resource.update(this.id, data, { statusTo: [this, 'formStatus'], throwErrors: false });
-      this.$emit('update', record);
-    },
-    delete() {
-      return this._resource.delete(this.id, { statusTo: [this, 'formStatus'], throwErrors: false });
-    },
-    member_get(id, action) {
-      return this._resource.member_action(this.id, action, { statusTo: [this, 'formStatus'], throwErrors: false });
-    }
-  },
-  watch: {
-    status() {
-      this.$emit('status', this.status);
-    }
-  }
-};
-
-/* script */
-const __vue_script__$1 = script$1;
-
-/* template */
-var __vue_render__$1 = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", [_c("rr-resource-status", {
-    attrs: { status: _vm.status, label: _vm.label }
-  }), _c("rr-resource-status", {
-    attrs: { status: _vm.formStatus, label: _vm.label }
-  })], 1);
-};
-var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
-
-/* style */
-const __vue_inject_styles__$1 = undefined;
-/* scoped */
-const __vue_scope_id__$1 = undefined;
-/* module identifier */
-const __vue_module_identifier__$1 = undefined;
-/* functional template */
-const __vue_is_functional_template__$1 = false;
-/* component normalizer */
-function __vue_normalize__$1(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script === 'function' ? script.options : script) || {};
-
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/model.vue";
-
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
-
-    if (functional) component.functional = true;
-  }
-
-  component._scopeId = scope;
-
-  return component;
-}
-/* style inject */
-
-/* style inject SSR */
-
-var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
-
+//
 //
 //
 //
@@ -362,7 +407,7 @@ var __vue_render__$2 = function () {
     attrs: { show: "show", variant: "danger" }
   }, [_vm._v(_vm._s(_vm.status.error.body.error))])] : [_c("b-alert", {
     attrs: { show: "show", variant: "danger" }
-  }, [_vm._v("Something went wrong: Server returned Error 500")])]] : [_c("pre", [_vm._v(_vm._s(_vm.status))])]], 2) : _vm._e()], 1) : _vm._e();
+  }, [_vm._v("Something went wrong: Server returned Error 500")])]] : _vm.status.error.status === "error" ? [_c("b-alert", { attrs: { show: "show", variant: "danger" } }, [_vm._v(_vm._s(_vm.status.error.error))])] : [_c("pre", [_vm._v(_vm._s(_vm.status))])]], 2) : _vm._e()], 1) : _vm._e();
 };
 var __vue_staticRenderFns__$2 = [];
 __vue_render__$2._withStripped = true;
@@ -370,10 +415,10 @@ __vue_render__$2._withStripped = true;
 /* style */
 const __vue_inject_styles__$2 = function (inject) {
   if (!inject) return;
-  inject("data-v-6d8edf0a_0", { source: "\n.status[data-v-6d8edf0a] {\n  position: relative;\n}\n.status .loading[data-v-6d8edf0a] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAgCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n\n"] }, media: undefined });
+  inject("data-v-268215b2_0", { source: "\n.status[data-v-268215b2] {\n  position: relative;\n}\n.status .loading[data-v-268215b2] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAkCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else-if=\"status.error.status === 'error'\")\n        b-alert(show variant=\"danger\") {{status.error.error}}\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n\n"] }, media: undefined });
 };
 /* scoped */
-const __vue_scope_id__$2 = "data-v-6d8edf0a";
+const __vue_scope_id__$2 = "data-v-268215b2";
 /* module identifier */
 const __vue_module_identifier__$2 = undefined;
 /* functional template */
@@ -485,9 +530,6 @@ var script$3 = {
     name: {
       required: true
     },
-    path: {
-      required: true
-    },
     filter: {
       default() {
         return {};
@@ -495,14 +537,24 @@ var script$3 = {
     }
   },
   created() {
-    this._resource = new Resource(this.name, this.path);
+    try {
+      this._resource = this.$resource(this.name);
+    } catch (e) {
+      this.status = {
+        error: {
+          status: 'error',
+          error: e.message
+        }
+      };
+    }
   },
   async mounted() {
-    let data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
-    this.$emit('update', data);
+    this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
+    this.$emit('update', this.data);
   },
   data() {
     return {
+      data: [],
       status: {},
       formStatus: {},
       _resource: null
@@ -510,16 +562,49 @@ var script$3 = {
   },
   methods: {
     get(id) {
-      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false });
+      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter });
     },
-    create(data) {
-      return this._resource.create(data, { statusTo: [this, 'formStatus'], throwErrors: false });
+    async create(data) {
+      let result = await this._resource.create(data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+      if (this.formStatus.ready) {
+        let index = this.data.findIndex(item => item.id === result.id);
+        if (index >= 0) {
+          this.$set(this.data, index, result);
+        } else {
+          this.data.push(result);
+        }
+        this.$emit('update', this.data);
+      }
+      return result;
     },
-    update(id, data) {
-      return this._resource.update(id, data, { statusTo: [this, 'formStatus'], throwErrors: false });
+    async update(id, data) {
+      let result = await this._resource.update(id, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+      if (this.formStatus.ready) {
+        let index = this.data.findIndex(item => item.id === id);
+        this.$set(this.data, index, result);
+      }
+      return result;
     },
-    delete(id) {
-      return this._resource.delete(id, { statusTo: [this, 'formStatus'], throwErrors: false });
+    async delete(id) {
+      let result = await this._resource.delete(id, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+      if (result === null || !result.error) {
+        let index = this.data.findIndex(item => item.id === id);
+        this.$delete(this.data, index);
+      }
+      this.$emit('update', this.data);
+      return result;
     }
   },
   watch: {
@@ -579,15 +664,50 @@ function __vue_normalize__$3(template, style, script, scope, functional, moduleI
 
 var Collection = __vue_normalize__$3({ render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
 
+class ResourceCollection {
+  constructor() {
+    this.resources = {};
+  }
+  register(name, basePath, options) {
+    if (options === undefined) {
+      options = {};
+    }
+    let resourceName = options['resourceName'];
+    delete options.resourceName;
+    if (resourceName === undefined) {
+      resourceName = name;
+    }
+    this.resources[name] = new Resource(resourceName, basePath, options);
+  }
+  get(name) {
+    if (this.resources[name] !== undefined) {
+      return this.resources[name];
+    } else {
+      throw new Error(`no resource registered as: ${name}`);
+    }
+  }
+}
+
+class VueResource {
+  constructor() {}
+
+  install(Vue, options) {
+    Vue.resources = new ResourceCollection();
+
+    Vue.prototype.$resource = name => {
+      return Vue.resources.get(name);
+    };
+  }
+}
+
 // import Vue from 'vue'
 
 function install(Vue, options) {
+  Vue.use(new VueResource());
   Vue.component('rr-model', Model);
   Vue.component('rr-collection', Collection);
   Vue.component('rr-resource-status', ResourceStatus);
   Vue.component('rr-model-error', ModelError);
 }
 
-var index = { ModelError, Model, Resource, ResourceStatus, Collection, install };
-
-module.exports = index;
+exports.install = install;

@@ -4,8 +4,6 @@
     rr-resource-status(:status="formStatus", :label="label")
 </template>
 <script>
-import Resource from './resource'
-
 export default {
   props: {
     label: {},
@@ -31,8 +29,9 @@ export default {
     }
   },
   async mounted() {
+    this.$setDottedProps()
     this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
-    this.$emit('update', this.data)
+    this.sync_data()
   },
   data() {
     return {
@@ -43,6 +42,9 @@ export default {
     }
   },
   methods: {
+    sync_data() {
+      this.$emit('update:data', this.data)
+    },
     get(id) {
       return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter })
     },
@@ -59,7 +61,7 @@ export default {
         } else {
           this.data.push(result)
         }
-        this.$emit('update', this.data)
+        this.sync_data()
       }
       return result
     },
@@ -85,13 +87,13 @@ export default {
         let index = this.data.findIndex((item) => item.id === id)
         this.$delete(this.data, index)
       }
-      this.$emit('update', this.data)
+      this.sync_data()
       return result
     },
   },
   watch: {
     status() {
-      this.$emit('status', this.status)
+      this.$emit('update:status', this.status)
     },
   },
 }

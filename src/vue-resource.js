@@ -33,5 +33,19 @@ export default class VueResource {
     Vue.prototype.$resource = (name) => {
       return Vue.resources.get(name)
     }
+
+    Vue.prototype.$setDottedProps = function() {
+      for (let key of Object.keys(this.$attrs)) {
+        for (let pKey of this.$options._propKeys) {
+          let mr = key.match(`^${pKey}-([^.]+)$`)
+          if (mr) {
+            let subKey = mr[1]
+            if (this[pKey] === undefined) this[pKey] = {}
+            this[pKey][subKey] = this.$attrs[key]
+            delete this.$attrs[key]
+          }
+        }
+      }
+    }
   }
 }

@@ -103,6 +103,7 @@ var script$1 = {
     this._resource = this.$resource(this.name);
   },
   async mounted() {
+    this.$setDottedProps();
     await this.refresh();
   },
   data() {
@@ -113,6 +114,9 @@ var script$1 = {
     };
   },
   methods: {
+    sync_data(data) {
+      this.$emit('update:data', data);
+    },
     async refresh() {
       let data;
       if (this.action) {
@@ -128,7 +132,7 @@ var script$1 = {
           queryParams: this.filter
         });
       }
-      this.$emit('update', data);
+      this.sync_data(data);
     },
     async update(data) {
       if (this.action) {
@@ -139,7 +143,7 @@ var script$1 = {
         throwErrors: false,
         queryParams: this.filter
       });
-      this.$emit('update', record);
+      this.sync_data(record);
     },
     delete() {
       if (this.action) {
@@ -154,7 +158,7 @@ var script$1 = {
   },
   watch: {
     status() {
-      this.$emit('status', this.status);
+      this.$emit('update:status', this.status);
     }
   }
 };
@@ -415,10 +419,10 @@ __vue_render__$2._withStripped = true;
 /* style */
 const __vue_inject_styles__$2 = function (inject) {
   if (!inject) return;
-  inject("data-v-268215b2_0", { source: "\n.status[data-v-268215b2] {\n  position: relative;\n}\n.status .loading[data-v-268215b2] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAkCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else-if=\"status.error.status === 'error'\")\n        b-alert(show variant=\"danger\") {{status.error.error}}\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n\n"] }, media: undefined });
+  inject("data-v-4b909558_0", { source: "\n.status[data-v-4b909558] {\n  position: relative;\n}\n.status .loading[data-v-4b909558] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAkCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else-if=\"status.error.status === 'error'\")\n        b-alert(show variant=\"danger\") {{status.error.error}}\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n"] }, media: undefined });
 };
 /* scoped */
-const __vue_scope_id__$2 = "data-v-268215b2";
+const __vue_scope_id__$2 = "data-v-4b909558";
 /* module identifier */
 const __vue_module_identifier__$2 = undefined;
 /* functional template */
@@ -523,6 +527,10 @@ function __vue_create_injector__() {
 var ResourceStatus = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__, undefined);
 
 //
+//
+//
+//
+//
 
 var script$3 = {
   props: {
@@ -549,8 +557,9 @@ var script$3 = {
     }
   },
   async mounted() {
+    this.$setDottedProps();
     this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
-    this.$emit('update', this.data);
+    this.sync_data();
   },
   data() {
     return {
@@ -561,6 +570,9 @@ var script$3 = {
     };
   },
   methods: {
+    sync_data() {
+      this.$emit('update:data', this.data);
+    },
     get(id) {
       return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter });
     },
@@ -577,7 +589,7 @@ var script$3 = {
         } else {
           this.data.push(result);
         }
-        this.$emit('update', this.data);
+        this.sync_data();
       }
       return result;
     },
@@ -603,13 +615,13 @@ var script$3 = {
         let index = this.data.findIndex(item => item.id === id);
         this.$delete(this.data, index);
       }
-      this.$emit('update', this.data);
+      this.sync_data();
       return result;
     }
   },
   watch: {
     status() {
-      this.$emit('status', this.status);
+      this.$emit('update:status', this.status);
     }
   }
 };
@@ -696,6 +708,20 @@ class VueResource {
 
     Vue.prototype.$resource = name => {
       return Vue.resources.get(name);
+    };
+
+    Vue.prototype.$setDottedProps = function () {
+      for (let key of Object.keys(this.$attrs)) {
+        for (let pKey of this.$options._propKeys) {
+          let mr = key.match(`^${pKey}-([^.]+)$`);
+          if (mr) {
+            let subKey = mr[1];
+            if (this[pKey] === undefined) this[pKey] = {};
+            this[pKey][subKey] = this.$attrs[key];
+            delete this.$attrs[key];
+          }
+        }
+      }
     };
   }
 }

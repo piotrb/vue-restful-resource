@@ -26,6 +26,7 @@ export default {
     this._resource = this.$resource(this.name)
   },
   async mounted() {
+    this.$setDottedProps()
     await this.refresh()
   },
   data() {
@@ -36,6 +37,9 @@ export default {
     }
   },
   methods: {
+    sync_data(data) {
+      this.$emit('update:data', data)
+    },
     async refresh() {
       let data
       if (this.action) {
@@ -51,7 +55,7 @@ export default {
           queryParams: this.filter,
         })
       }
-      this.$emit('update', data)
+      this.sync_data(data)
     },
     async update(data) {
       if (this.action) {
@@ -62,7 +66,7 @@ export default {
         throwErrors: false,
         queryParams: this.filter,
       })
-      this.$emit('update', record)
+      this.sync_data(record)
     },
     delete() {
       if (this.action) {
@@ -77,7 +81,7 @@ export default {
   },
   watch: {
     status() {
-      this.$emit('status', this.status)
+      this.$emit('update:status', this.status)
     },
   },
 }

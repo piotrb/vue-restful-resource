@@ -15,4 +15,4 @@ function install(Vue, options) {
   Vue.component('rr-model-error', ModelError)
 }
 
-export { install }
+export default install

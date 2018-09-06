@@ -1,8 +1,9 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "vue-restful-resource",
   "main": "src/index.js",
   "module": "dist/bundle.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "rollup -c"
   },

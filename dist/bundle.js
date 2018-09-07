@@ -287,7 +287,9 @@ class Resource {
   }
 
   async member_get(id, action, runtimeOptions) {
-    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`);
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams);
     return this._execute({
       url: url,
       headers: Resource.commonHeaders

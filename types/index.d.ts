@@ -15,6 +15,12 @@ export interface Collection<T> extends Element {
   delete(id: number): Promise<void>
 }
 
+export interface Model<T> extends Element {
+  refresh(): Promise<void>
+  update(data: T): Promise<void>
+  delete(): Promise<void>
+}
+
 declare const install: () => void
 
 export default install

@@ -15,6 +15,7 @@ export default {
         return {}
       },
     },
+    seed: {},
   },
   created() {
     try {
@@ -30,8 +31,7 @@ export default {
   },
   async mounted() {
     this.$setDottedProps()
-    this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
-    this.sync_data()
+    await this.refresh()
   },
   data() {
     return {
@@ -47,6 +47,10 @@ export default {
     },
     get(id) {
       return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter })
+    },
+    async refresh() {
+      this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false })
+      this.sync_data()
     },
     async create(data) {
       let result = await this._resource.create(data, {
@@ -94,6 +98,9 @@ export default {
   watch: {
     status() {
       this.$emit('update:status', this.status)
+    },
+    async seed() {
+      await this.refresh()
     },
   },
 }

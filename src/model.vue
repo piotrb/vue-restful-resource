@@ -21,6 +21,7 @@ export default {
         return {}
       },
     },
+    seed: {},
   },
   created() {
     this._resource = this.$resource(this.name)
@@ -82,6 +83,9 @@ export default {
   watch: {
     status() {
       this.$emit('update:status', this.status)
+    },
+    async seed() {
+      await this.refresh()
     },
   },
 }

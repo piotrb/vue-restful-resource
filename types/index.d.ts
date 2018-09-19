@@ -13,6 +13,7 @@ export interface Collection<T> extends Element {
   create(data: T): Promise<T>
   update(id: number, data: T): Promise<T>
   delete(id: number): Promise<void>
+  refresh(): Promise<void>
 }
 
 export interface Model<T> extends Element {

@@ -95,7 +95,8 @@ var script$1 = {
       default() {
         return {};
       }
-    }
+    },
+    seed: {}
   },
   created() {
     this._resource = this.$resource(this.name);
@@ -157,6 +158,9 @@ var script$1 = {
   watch: {
     status() {
       this.$emit('update:status', this.status);
+    },
+    async seed() {
+      await this.refresh();
     }
   }
 };
@@ -292,6 +296,18 @@ class Resource {
     let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams);
     return this._execute({
       url: url,
+      headers: Resource.commonHeaders
+    }, runtimeOptions);
+  }
+
+  async member_post(id, action, data, runtimeOptions) {
+    let queryParams = runtimeOptions['queryParams'];
+    delete runtimeOptions['queryParams'];
+    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams);
+    return this._execute({
+      url: url,
+      method: 'post',
+      body: JSON.stringify(data),
       headers: Resource.commonHeaders
     }, runtimeOptions);
   }
@@ -542,7 +558,8 @@ var script$3 = {
       default() {
         return {};
       }
-    }
+    },
+    seed: {}
   },
   created() {
     try {
@@ -558,8 +575,7 @@ var script$3 = {
   },
   async mounted() {
     this.$setDottedProps();
-    this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
-    this.sync_data();
+    await this.refresh();
   },
   data() {
     return {
@@ -575,6 +591,10 @@ var script$3 = {
     },
     get(id) {
       return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter });
+    },
+    async refresh() {
+      this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
+      this.sync_data();
     },
     async create(data) {
       let result = await this._resource.create(data, {
@@ -617,11 +637,28 @@ var script$3 = {
       }
       this.sync_data();
       return result;
+    },
+    member_get(id, action) {
+      return this._resource.member_get(id, action, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+    },
+    member_post(id, action, data) {
+      return this._resource.member_post(id, action, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
     }
   },
   watch: {
     status() {
       this.$emit('update:status', this.status);
+    },
+    async seed() {
+      await this.refresh();
     }
   }
 };

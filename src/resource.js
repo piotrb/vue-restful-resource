@@ -101,6 +101,21 @@ export default class Resource {
     )
   }
 
+  async member_post(id, action, data, runtimeOptions) {
+    let queryParams = runtimeOptions['queryParams']
+    delete runtimeOptions['queryParams']
+    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams)
+    return this._execute(
+      {
+        url: url,
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: Resource.commonHeaders,
+      },
+      runtimeOptions
+    )
+  }
+
   async _execute(options, runtimeOptions = {}) {
     this._signalStatus({ start: true, busy: true }, runtimeOptions)
     let result = await fetch(options.url, options)

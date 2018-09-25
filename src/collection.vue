@@ -94,6 +94,20 @@ export default {
       this.sync_data()
       return result
     },
+    member_get(id, action) {
+      return this._resource.member_get(id, action, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter,
+      })
+    },
+    member_post(id, action, data) {
+      return this._resource.member_post(id, action, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter,
+      })
+    },
   },
   watch: {
     status() {

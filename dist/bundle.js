@@ -631,7 +631,7 @@ var script$3 = {
         throwErrors: false,
         queryParams: this.filter
       });
-      if (result === null || !result.error) {
+      if (result === null || result === undefined || !result.error) {
         let index = this.data.findIndex(item => item.id === id);
         this.$delete(this.data, index);
       }

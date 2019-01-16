@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": false,
+    "sourceMap": true,
+    "jsx": "preserve",
+
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es7", "dom"]
+  },
+  "include": ["node_modules/vue-tsx-support/enable-check.d.ts", "src/**/*"],
+  "compileOnSave": false
+}

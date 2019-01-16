@@ -1,21 +1,23 @@
-import Resource from './resource'
+import { Resource, ResourceOptions } from './resource'
+import { Vue as _Vue, Vue, VueConstructor } from 'vue/types/vue'
+
+export interface RegisterOptions extends ResourceOptions {
+  resourceName?: string
+}
 
 class ResourceCollection {
-  constructor() {
-    this.resources = {}
-  }
-  register(name, basePath, options) {
-    if (options === undefined) {
-      options = {}
-    }
-    let resourceName = options['resourceName']
+  resources: { [key: string]: Resource<any> } = {}
+
+  register<T>(name: string, basePath: string, options: RegisterOptions = {}) {
+    let resourceName = options.resourceName
     delete options.resourceName
     if (resourceName === undefined) {
       resourceName = name
     }
-    this.resources[name] = new Resource(resourceName, basePath, options)
+    this.resources[name] = new Resource<T>(resourceName, basePath, options)
   }
-  get(name) {
+
+  get(name: string) {
     if (this.resources[name] !== undefined) {
       return this.resources[name]
     } else {
@@ -24,13 +26,11 @@ class ResourceCollection {
   }
 }
 
-export default class VueResource {
-  constructor() {}
-
-  install(Vue, options) {
+export class VueResource {
+  install<T>(Vue: typeof _Vue, options?: T): void {
     Vue.resources = new ResourceCollection()
 
-    Vue.prototype.$resource = (name) => {
+    Vue.prototype.$resource = (name: string) => {
       return Vue.resources.get(name)
     }
 

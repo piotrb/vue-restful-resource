@@ -1,89 +1,575 @@
-'use strict';
+import { Component as Component$1, Watch } from 'vue-property-decorator';
+import { flatMap, mapKeys, map } from 'lodash';
+import { Component } from 'vue-tsx-support';
+import Component$2 from 'vue-class-component';
+import { stringify } from 'qs';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
 
-var qs = _interopDefault(require('qs'));
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
 
-//
-//
-//
-//
-//
-//
-//
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
 
-var script = {
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _construct(Parent, args, Class) {
+  if (isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+var ModelError =
+/*#__PURE__*/
+function (_tsx$Component) {
+  _inherits(ModelError, _tsx$Component);
+
+  function ModelError() {
+    _classCallCheck(this, ModelError);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(ModelError).apply(this, arguments));
+  }
+
+  _createClass(ModelError, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      var h = arguments[0];
+      return h("b-alert", {
+        attrs: {
+          show: true,
+          variant: "danger"
+        }
+      }, [flatMap(mapKeys(this.errors, function (fieldName) {
+        return map(_this.errors[fieldName], function (fieldError) {
+          if (fieldName == 'base') {
+            return h("div", [fieldError]);
+          } else {
+            return h("div", [fieldName, " ", fieldError]);
+          }
+        });
+      }))]);
+    }
+  }]);
+
+  return ModelError;
+}(Component);
+
+ModelError = __decorate([Component$1({
   props: {
     errors: {
       required: true
     }
-  },
-  data() {
-    return {};
   }
-};
+})], ModelError);
 
-/* script */
-const __vue_script__ = script;
+var ResourceStatus =
+/*#__PURE__*/
+function (_tsx$Component) {
+  _inherits(ResourceStatus, _tsx$Component);
 
-/* template */
-var __vue_render__ = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("b-alert", { attrs: { show: "show", variant: "danger" } }, [_vm._l(_vm.errors, function (fieldErrors, fieldName) {
-    return [_vm._l(fieldErrors, function (fieldError) {
-      return [fieldName === "base" ? _c("div", [_vm._v(_vm._s(fieldError))]) : _c("div", [_vm._v(_vm._s(fieldName) + " " + _vm._s(fieldError))])];
-    })];
-  })], 2);
-};
-var __vue_staticRenderFns__ = [];
-__vue_render__._withStripped = true;
+  function ResourceStatus() {
+    _classCallCheck(this, ResourceStatus);
 
-/* style */
-const __vue_inject_styles__ = undefined;
-/* scoped */
-const __vue_scope_id__ = undefined;
-/* module identifier */
-const __vue_module_identifier__ = undefined;
-/* functional template */
-const __vue_is_functional_template__ = false;
-/* component normalizer */
-function __vue_normalize__(template, style, script$$1, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
-
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/model.error.vue";
-
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
-
-    if (functional) component.functional = true;
+    return _possibleConstructorReturn(this, _getPrototypeOf(ResourceStatus).apply(this, arguments));
   }
 
-  component._scopeId = scope;
+  _createClass(ResourceStatus, [{
+    key: "renderError",
+    value: function renderError() {
+      var h = this.$createElement;
 
-  return component;
-}
-/* style inject */
+      if (this.status.error.status == 422) {
+        return h(ModelError, {
+          attrs: {
+            errors: this.status.error.body
+          }
+        });
+      } else if (this.status.error.status == 500) {
+        if (this.status.error.body) {
+          return h("b-alert", {
+            attrs: {
+              show: true,
+              variant: "danger"
+            }
+          }, [this.status.error.body.error]);
+        } else {
+          return h("b-alert", {
+            attrs: {
+              show: true,
+              variant: "danger"
+            }
+          }, ["Something went wrong: Server returned Error 500"]);
+        }
+      } else if (this.status.error.status == 'error') {
+        return h("b-alert", {
+          attrs: {
+            show: true,
+            variant: "danger"
+          }
+        }, [this.status.error.error]);
+      } else {
+        return h("pre", [this.status]);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var h = arguments[0];
 
-/* style inject SSR */
+      if (this.status) {
+        return h("div", {
+          style: "position: relative"
+        }, [this.status.start ? h("b-alert", {
+          style: "position: absolute; z-index: 99;",
+          attrs: {
+            show: true,
+            variant: "info"
+          }
+        }, ["Loading ", this.label, " ...", h("font-awesome-icon", {
+          attrs: {
+            icon: "spinner",
+            pulse: true
+          }
+        })]) : null, this.status.ready ? h("div", [h("slot", {
+          attrs: {
+            name: "ready"
+          }
+        })]) : null, this.status.error ? h("div", [this.renderError()]) : null]);
+      } else {
+        return h("div");
+      }
+    }
+  }]);
 
-var ModelError = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
+  return ResourceStatus;
+}(Component);
 
-//
-//
-//
-//
-//
-
-var script$1 = {
+ResourceStatus = __decorate([Component$2({
   props: {
-    label: {},
-    name: {
+    status: {
       required: true
+    },
+    label: {}
+  }
+})], ResourceStatus);
+
+var Model =
+/*#__PURE__*/
+function (_tsx$Component) {
+  _inherits(Model, _tsx$Component);
+
+  function Model() {
+    var _this;
+
+    _classCallCheck(this, Model);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Model).apply(this, arguments));
+    _this.status = {};
+    _this.formStatus = {};
+    _this._resource = null;
+    return _this;
+  }
+
+  _createClass(Model, [{
+    key: "created",
+    value: function created() {
+      this._resource = this.$resource(this.name);
+    }
+  }, {
+    key: "mounted",
+    value: function () {
+      var _mounted = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.$setDottedProps();
+                _context.next = 3;
+                return this.refresh();
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function mounted() {
+        return _mounted.apply(this, arguments);
+      }
+
+      return mounted;
+    }()
+  }, {
+    key: "render",
+    value: function render() {
+      var h = arguments[0];
+      return h("div", [h(ResourceStatus, {
+        attrs: {
+          status: this.status,
+          label: this.label
+        }
+      }), h(ResourceStatus, {
+        attrs: {
+          status: this.formStatus,
+          label: this.label
+        }
+      })]);
+    }
+  }, {
+    key: "sync_data",
+    value: function sync_data(data) {
+      this.$emit('update:data', data);
+    }
+  }, {
+    key: "refresh",
+    value: function () {
+      var _refresh = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2() {
+        var data;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!this.action) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                _context2.next = 3;
+                return this._resource.member_get(this.id, this.action, {
+                  statusTo: [this, 'status'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 3:
+                data = _context2.sent;
+                _context2.next = 9;
+                break;
+
+              case 6:
+                _context2.next = 8;
+                return this._resource.get(this.id, {
+                  statusTo: [this, 'status'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 8:
+                data = _context2.sent;
+
+              case 9:
+                this.sync_data(data);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function refresh() {
+        return _refresh.apply(this, arguments);
+      }
+
+      return refresh;
+    }()
+  }, {
+    key: "update",
+    value: function () {
+      var _update = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(data) {
+        var record;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!this.action) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                throw new Error('update not supported for custom actions');
+
+              case 2:
+                _context3.next = 4;
+                return this._resource.update(this.id, data, {
+                  statusTo: [this, 'formStatus'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 4:
+                record = _context3.sent;
+                this.sync_data(record);
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function update(_x) {
+        return _update.apply(this, arguments);
+      }
+
+      return update;
+    }()
+  }, {
+    key: "delete",
+    value: function _delete() {
+      if (this.action) {
+        throw new Error('delete not supported for custom actions');
+      }
+
+      return this._resource.delete(this.id, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+    }
+  }, {
+    key: "onStatusChange",
+    value: function onStatusChange() {
+      this.$emit('update:status', this.status);
+    }
+  }, {
+    key: "onSeedChange",
+    value: function () {
+      var _onSeedChange = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4() {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.refresh();
+
+              case 2:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function onSeedChange() {
+        return _onSeedChange.apply(this, arguments);
+      }
+
+      return onSeedChange;
+    }()
+  }]);
+
+  return Model;
+}(Component);
+
+__decorate([Watch('status'), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Model.prototype, "onStatusChange", null);
+
+__decorate([Watch('seed'), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", Promise)], Model.prototype, "onSeedChange", null);
+
+Model = __decorate([Component$2({
+  props: {
+    label: String,
+    name: {
+      required: true,
+      type: String
     },
     id: {
       required: true
@@ -92,141 +578,382 @@ var script$1 = {
       default: null
     },
     filter: {
-      default() {
+      default: function _default() {
         return {};
       }
     },
     seed: {}
-  },
-  created() {
-    this._resource = this.$resource(this.name);
-  },
-  async mounted() {
-    this.$setDottedProps();
-    await this.refresh();
-  },
-  data() {
-    return {
-      status: {},
-      formStatus: {},
-      _resource: null
-    };
-  },
-  methods: {
-    sync_data(data) {
-      this.$emit('update:data', data);
-    },
-    async refresh() {
-      let data;
-      if (this.action) {
-        data = await this._resource.member_get(this.id, this.action, {
-          statusTo: [this, 'status'],
-          throwErrors: false,
-          queryParams: this.filter
-        });
-      } else {
-        data = await this._resource.get(this.id, {
-          statusTo: [this, 'status'],
-          throwErrors: false,
-          queryParams: this.filter
-        });
+  }
+})], Model);
+
+var Collection =
+/*#__PURE__*/
+function (_tsx$Component) {
+  _inherits(Collection, _tsx$Component);
+
+  function Collection() {
+    var _this;
+
+    _classCallCheck(this, Collection);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Collection).apply(this, arguments));
+    _this.data = [];
+    _this.status = {};
+    _this.formStatus = {};
+    _this._resource = null;
+    return _this;
+  }
+
+  _createClass(Collection, [{
+    key: "created",
+    value: function created() {
+      try {
+        this._resource = this.$resource(this.name);
+      } catch (e) {
+        this.status = {
+          error: {
+            status: 'error',
+            error: e.message
+          }
+        };
       }
-      this.sync_data(data);
-    },
-    async update(data) {
-      if (this.action) {
-        throw new Error('update not supported for custom actions');
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var h = arguments[0];
+      return h("div", [h(ResourceStatus, {
+        attrs: {
+          status: this.status,
+          label: this.label
+        }
+      }), h(ResourceStatus, {
+        attrs: {
+          status: this.formStatus,
+          label: this.label
+        }
+      })]);
+    }
+  }, {
+    key: "mounted",
+    value: function () {
+      var _mounted = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.$setDottedProps();
+                _context.next = 3;
+                return this.refresh();
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function mounted() {
+        return _mounted.apply(this, arguments);
       }
-      let record = await this._resource.update(this.id, data, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-      this.sync_data(record);
-    },
-    delete() {
-      if (this.action) {
-        throw new Error('delete not supported for custom actions');
-      }
-      return this._resource.delete(this.id, {
+
+      return mounted;
+    }()
+  }, {
+    key: "sync_data",
+    value: function sync_data() {
+      this.$emit('update:data', this.data);
+    }
+  }, {
+    key: "get",
+    value: function get(id) {
+      return this._resource.get(id, {
         statusTo: [this, 'formStatus'],
         throwErrors: false,
         queryParams: this.filter
       });
     }
-  },
-  watch: {
-    status() {
+  }, {
+    key: "refresh",
+    value: function () {
+      var _refresh = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2() {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this._resource.query(this.filter, {
+                  statusTo: [this, 'status'],
+                  throwErrors: false
+                });
+
+              case 2:
+                this.data = _context2.sent;
+                this.sync_data();
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function refresh() {
+        return _refresh.apply(this, arguments);
+      }
+
+      return refresh;
+    }()
+  }, {
+    key: "create",
+    value: function () {
+      var _create = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(data) {
+        var result, index;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this._resource.create(data, {
+                  statusTo: [this, 'formStatus'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 2:
+                result = _context3.sent;
+
+                if (this.formStatus.ready) {
+                  index = this.data.findIndex(function (item) {
+                    return item.id === result.id;
+                  });
+
+                  if (index >= 0) {
+                    this.$set(this.data, index, result);
+                  } else {
+                    this.data.push(result);
+                  }
+
+                  this.sync_data();
+                }
+
+                return _context3.abrupt("return", result);
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function create(_x) {
+        return _create.apply(this, arguments);
+      }
+
+      return create;
+    }()
+  }, {
+    key: "update",
+    value: function () {
+      var _update = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(id, data) {
+        var result, index;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this._resource.update(id, data, {
+                  statusTo: [this, 'formStatus'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 2:
+                result = _context4.sent;
+
+                if (this.formStatus.ready) {
+                  index = this.data.findIndex(function (item) {
+                    return item.id === id;
+                  });
+                  this.$set(this.data, index, result);
+                }
+
+                return _context4.abrupt("return", result);
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function update(_x2, _x3) {
+        return _update.apply(this, arguments);
+      }
+
+      return update;
+    }()
+  }, {
+    key: "delete",
+    value: function () {
+      var _delete2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee5(id) {
+        var result, index;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this._resource.delete(id, {
+                  statusTo: [this, 'formStatus'],
+                  throwErrors: false,
+                  queryParams: this.filter
+                });
+
+              case 2:
+                result = _context5.sent;
+
+                if (result === null || result === undefined || !result.error) {
+                  if (!this.formStatus.error) {
+                    index = this.data.findIndex(function (item) {
+                      return item.id === id;
+                    });
+                    this.$delete(this.data, index);
+                  }
+                }
+
+                this.sync_data();
+                return _context5.abrupt("return", result);
+
+              case 6:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function _delete(_x4) {
+        return _delete2.apply(this, arguments);
+      }
+
+      return _delete;
+    }()
+  }, {
+    key: "member_get",
+    value: function member_get(id, action) {
+      return this._resource.member_get(id, action, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+    }
+  }, {
+    key: "member_post",
+    value: function member_post(id, action, data) {
+      return this._resource.member_post(id, action, data, {
+        statusTo: [this, 'formStatus'],
+        throwErrors: false,
+        queryParams: this.filter
+      });
+    }
+  }, {
+    key: "onStatusChange",
+    value: function onStatusChange() {
       this.$emit('update:status', this.status);
-    },
-    async seed() {
-      await this.refresh();
     }
+  }, {
+    key: "onSeedChange",
+    value: function () {
+      var _onSeedChange = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return this.refresh();
+
+              case 2:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function onSeedChange() {
+        return _onSeedChange.apply(this, arguments);
+      }
+
+      return onSeedChange;
+    }()
+  }]);
+
+  return Collection;
+}(Component);
+
+__decorate([Watch('status'), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Collection.prototype, "onStatusChange", null);
+
+__decorate([Watch('seed'), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", Promise)], Collection.prototype, "onSeedChange", null);
+
+Collection = __decorate([Component$2({
+  props: {
+    label: String,
+    name: {
+      required: true,
+      type: String
+    },
+    filter: {
+      default: function _default() {
+        return {};
+      }
+    },
+    seed: {}
   }
-};
+})], Collection);
 
-/* script */
-const __vue_script__$1 = script$1;
+var ResourceError =
+/*#__PURE__*/
+function (_Error) {
+  _inherits(ResourceError, _Error);
 
-/* template */
-var __vue_render__$1 = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", [_c("rr-resource-status", {
-    attrs: { status: _vm.status, label: _vm.label }
-  }), _c("rr-resource-status", {
-    attrs: { status: _vm.formStatus, label: _vm.label }
-  })], 1);
-};
-var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
+  function ResourceError(message, errorInfo) {
+    var _this;
 
-/* style */
-const __vue_inject_styles__$1 = undefined;
-/* scoped */
-const __vue_scope_id__$1 = undefined;
-/* module identifier */
-const __vue_module_identifier__$1 = undefined;
-/* functional template */
-const __vue_is_functional_template__$1 = false;
-/* component normalizer */
-function __vue_normalize__$1(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script === 'function' ? script.options : script) || {};
+    _classCallCheck(this, ResourceError);
 
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/model.vue";
-
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
-
-    if (functional) component.functional = true;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ResourceError).call(this, message));
+    _this.errorInfo = errorInfo;
+    return _this;
   }
 
-  component._scopeId = scope;
+  return ResourceError;
+}(_wrapNativeSuper(Error));
 
-  return component;
-}
-/* style inject */
+var Resource =
+/*#__PURE__*/
+function () {
+  function Resource(resouceName, basePath, options) {
+    _classCallCheck(this, Resource);
 
-/* style inject SSR */
-
-var Model = __vue_normalize__$1({ render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
-
-class ResourceError extends Error {
-  constructor(message, errorInfo) {
-    super(message);
-    this.errorInfo = errorInfo;
-  }
-}
-
-class Resource {
-
-  constructor(resouceName, basePath, options) {
-    this.resouceName = resouceName;
+    this.resourceName = resouceName;
     this.basePath = basePath;
+
     if (options) {
       this.defaultQuery = options.defaultQuery;
     } else {
@@ -234,543 +961,550 @@ class Resource {
     }
   }
 
-  async query(options, runtimeOptions) {
-    let url = this._buildUrl(null, options);
-    return this._execute({ url: url }, runtimeOptions);
-  }
+  _createClass(Resource, [{
+    key: "query",
+    value: function () {
+      var _query = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(options) {
+        var runtimeOptions,
+            url,
+            _args = arguments;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                runtimeOptions = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
+                url = this._buildUrl(undefined, options);
+                return _context.abrupt("return", this._execute({
+                  url: url
+                }, runtimeOptions));
 
-  async create(data, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(undefined, queryParams);
-    let body = {};
-    data._ = '_';
-    body[this.resouceName] = data;
-    return this._execute({
-      url: url,
-      method: 'post',
-      body: JSON.stringify(body),
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
 
-  async update(id, data, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
-    let body = {};
-    data._ = '_';
-    body[this.resouceName] = data;
-    return this._execute({
-      url: url,
-      method: 'put',
-      body: JSON.stringify(body),
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
-
-  async delete(id, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
-    return this._execute({
-      url: url,
-      method: 'delete',
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
-
-  async get(id, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams);
-    return this._execute({
-      url: url,
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
-
-  async member_get(id, action, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams);
-    return this._execute({
-      url: url,
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
-
-  async member_post(id, action, data, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams'];
-    delete runtimeOptions['queryParams'];
-    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams);
-    return this._execute({
-      url: url,
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: Resource.commonHeaders
-    }, runtimeOptions);
-  }
-
-  async _execute(options, runtimeOptions = {}) {
-    this._signalStatus({ start: true, busy: true }, runtimeOptions);
-    let result = await fetch(options.url, options);
-    return this._handleResult(result, runtimeOptions);
-  }
-
-  _signalStatus(status, runtimeOptions) {
-    let statusFunction = runtimeOptions.status;
-    if (runtimeOptions.statusTo) {
-      statusFunction = s => {
-        runtimeOptions.statusTo[0][runtimeOptions.statusTo[1]] = s;
-      };
-    }
-    if (statusFunction) {
-      statusFunction(status);
-    }
-  }
-
-  _buildUrl(relative, options) {
-    options = Object.assign({}, this.defaultQuery, options);
-    let url = this.basePath;
-    if (relative) {
-      url += relative;
-    }
-    if (options) {
-      url += '?' + qs.stringify(options);
-    }
-    return url;
-  }
-
-  async _handleResult(result, runtimeOptions) {
-    if (result.ok) {
-      try {
-        let data = await result.json();
-        this._signalStatus({ ready: true, busy: false }, runtimeOptions);
-        return data;
-      } catch (e) {
-        this._signalStatus({ ready: true, busy: false }, runtimeOptions);
-        return null;
-      }
-    } else {
-      let errorInfo = {
-        status: result.status,
-        statusText: result.statusText,
-        body: null
-      };
-
-      try {
-        errorInfo.body = await result.json();
-      } catch (e) {
-        errorInfo.body = null;
+      function query(_x) {
+        return _query.apply(this, arguments);
       }
 
-      this._signalStatus({ error: errorInfo, busy: false }, runtimeOptions);
+      return query;
+    }()
+  }, {
+    key: "create",
+    value: function () {
+      var _create = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(data, runtimeOptions) {
+        var queryParams, url, body;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                queryParams = runtimeOptions.queryParams;
+                delete runtimeOptions.queryParams;
+                url = this._buildUrl(undefined, queryParams);
+                body = {};
+                data._ = '_';
+                body[this.resourceName] = data;
+                return _context2.abrupt("return", this._execute({
+                  url: url,
+                  method: 'post',
+                  body: JSON.stringify(body),
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
 
-      if (runtimeOptions.throwErrors) {
-        throw new ResourceError('request failed', errorInfo);
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function create(_x2, _x3) {
+        return _create.apply(this, arguments);
       }
-    }
-  }
-}
-Resource.commonHeaders = { 'Content-Type': 'application/json' };
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+      return create;
+    }()
+  }, {
+    key: "update",
+    value: function () {
+      var _update = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(id, data) {
+        var runtimeOptions,
+            queryParams,
+            url,
+            body,
+            _args3 = arguments;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                runtimeOptions = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : {};
+                queryParams = runtimeOptions['queryParams'];
+                delete runtimeOptions['queryParams'];
+                url = this._buildUrl("/".concat(encodeURIComponent(String(id))), queryParams);
+                body = {};
+                data._ = '_';
+                body[this.resourceName] = data;
+                return _context3.abrupt("return", this._execute({
+                  url: url,
+                  method: 'put',
+                  body: JSON.stringify(body),
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
 
-var script$2 = {
-  props: {
-    status: {
-      required: true
-    },
-    label: {}
-  },
-  data() {
-    return {};
-  }
-};
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
 
-/* script */
-const __vue_script__$2 = script$2;
+      function update(_x4, _x5) {
+        return _update.apply(this, arguments);
+      }
 
-/* template */
-var __vue_render__$2 = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _vm.status ? _c("div", { staticClass: "status" }, [_vm.status.start ? _c("b-alert", {
-    staticClass: "loading",
-    attrs: { show: "show", variant: "info" }
-  }, [_vm._v("Loading " + _vm._s(_vm.label) + " ..."), _c("font-awesome-icon", {
-    attrs: { icon: "spinner", pulse: "pulse" }
-  })], 1) : _vm._e(), _vm.status.ready ? _c("div", [_vm._t("ready")], 2) : _vm._e(), _vm.status.error ? _c("div", [_vm.status.error.status === 422 ? [_c("rr-model-error", {
-    attrs: { errors: _vm.status.error.body }
-  })] : _vm.status.error.status === 500 ? [_vm.status.error.body ? [_c("b-alert", {
-    attrs: { show: "show", variant: "danger" }
-  }, [_vm._v(_vm._s(_vm.status.error.body.error))])] : [_c("b-alert", {
-    attrs: { show: "show", variant: "danger" }
-  }, [_vm._v("Something went wrong: Server returned Error 500")])]] : _vm.status.error.status === "error" ? [_c("b-alert", { attrs: { show: "show", variant: "danger" } }, [_vm._v(_vm._s(_vm.status.error.error))])] : [_c("pre", [_vm._v(_vm._s(_vm.status))])]], 2) : _vm._e()], 1) : _vm._e();
-};
-var __vue_staticRenderFns__$2 = [];
-__vue_render__$2._withStripped = true;
+      return update;
+    }()
+  }, {
+    key: "delete",
+    value: function () {
+      var _delete2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(id) {
+        var runtimeOptions,
+            queryParams,
+            url,
+            _args4 = arguments;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                runtimeOptions = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : {};
+                queryParams = runtimeOptions.queryParams;
+                delete runtimeOptions.queryParams;
+                url = this._buildUrl("/".concat(encodeURIComponent(String(id))), queryParams);
+                return _context4.abrupt("return", this._execute({
+                  url: url,
+                  method: 'delete',
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
 
-/* style */
-const __vue_inject_styles__$2 = function (inject) {
-  if (!inject) return;
-  inject("data-v-4b909558_0", { source: "\n.status[data-v-4b909558] {\n  position: relative;\n}\n.status .loading[data-v-4b909558] {\n  position: absolute;\n  z-index: 99;\n}\n", map: { "version": 3, "sources": ["/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue"], "names": [], "mappings": ";AAkCA;EACA,mBAAA;CACA;AACA;EACA,mBAAA;EACA,YAAA;CACA", "file": "resource.status.vue", "sourcesContent": ["<template lang=\"pug\">\n  div.status(v-if=\"status\")\n    b-alert.loading(show variant=\"info\" v-if=\"status.start\")\n      | Loading {{label}} ...\n      font-awesome-icon(icon=\"spinner\" pulse)\n    div(v-if=\"status.ready\")\n      slot(name=\"ready\")\n    div(v-if=\"status.error\")\n      template(v-if=\"status.error.status === 422\")\n        rr-model-error(:errors=\"status.error.body\")\n      template(v-else-if=\"status.error.status === 500\")\n        template(v-if=\"status.error.body\")\n          b-alert(show variant=\"danger\") {{status.error.body.error}}\n        template(v-else)\n          b-alert(show variant=\"danger\") Something went wrong: Server returned Error 500\n      template(v-else-if=\"status.error.status === 'error'\")\n        b-alert(show variant=\"danger\") {{status.error.error}}\n      template(v-else)\n        pre {{status}}\n</template>\n<script>\nexport default {\n  props: {\n    status: {\n      required: true,\n    },\n    label: {},\n  },\n  data() {\n    return {}\n  },\n}\n</script>\n<style scoped>\n.status {\n  position: relative;\n}\n.status .loading {\n  position: absolute;\n  z-index: 99;\n}\n</style>\n"] }, media: undefined });
-};
-/* scoped */
-const __vue_scope_id__$2 = "data-v-4b909558";
-/* module identifier */
-const __vue_module_identifier__$2 = undefined;
-/* functional template */
-const __vue_is_functional_template__$2 = false;
-/* component normalizer */
-function __vue_normalize__$2(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script === 'function' ? script.options : script) || {};
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
 
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/resource.status.vue";
+      function _delete(_x6) {
+        return _delete2.apply(this, arguments);
+      }
 
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
+      return _delete;
+    }()
+  }, {
+    key: "get",
+    value: function () {
+      var _get$$1 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee5(id) {
+        var runtimeOptions,
+            queryParams,
+            url,
+            _args5 = arguments;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                runtimeOptions = _args5.length > 1 && _args5[1] !== undefined ? _args5[1] : {};
+                queryParams = runtimeOptions['queryParams'];
+                delete runtimeOptions['queryParams'];
+                url = this._buildUrl("/".concat(encodeURIComponent(String(id))), queryParams);
+                return _context5.abrupt("return", this._execute({
+                  url: url,
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
 
-    if (functional) component.functional = true;
-  }
+              case 5:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
 
-  component._scopeId = scope;
+      function get(_x7) {
+        return _get$$1.apply(this, arguments);
+      }
 
-  {
-    let hook;
-    if (style) {
-      hook = function (context) {
-        style.call(this, createInjector(context));
-      };
-    }
+      return get;
+    }()
+  }, {
+    key: "member_get",
+    value: function () {
+      var _member_get = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee6(id, action) {
+        var runtimeOptions,
+            queryParams,
+            url,
+            _args6 = arguments;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                runtimeOptions = _args6.length > 2 && _args6[2] !== undefined ? _args6[2] : {};
+                queryParams = runtimeOptions.queryParams;
+                delete runtimeOptions.queryParams;
+                url = this._buildUrl("/".concat(encodeURIComponent(String(id)), "/").concat(action), queryParams);
+                return _context6.abrupt("return", this._execute({
+                  url: url,
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
 
-    if (hook !== undefined) {
-      if (component.functional) {
-        // register for functional component in vue file
-        const originalRender = component.render;
-        component.render = function renderWithStyleInjection(h, context) {
-          hook.call(context);
-          return originalRender(h, context);
+              case 5:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function member_get(_x8, _x9) {
+        return _member_get.apply(this, arguments);
+      }
+
+      return member_get;
+    }()
+  }, {
+    key: "member_post",
+    value: function () {
+      var _member_post = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee7(id, action, data) {
+        var runtimeOptions,
+            queryParams,
+            url,
+            _args7 = arguments;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                runtimeOptions = _args7.length > 3 && _args7[3] !== undefined ? _args7[3] : {};
+                queryParams = runtimeOptions.queryParams;
+                delete runtimeOptions.queryParams;
+                url = this._buildUrl("/".concat(encodeURIComponent(String(id)), "/").concat(action), queryParams);
+                return _context7.abrupt("return", this._execute({
+                  url: url,
+                  method: 'post',
+                  body: JSON.stringify(data),
+                  headers: Resource.commonHeaders
+                }, runtimeOptions));
+
+              case 5:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      function member_post(_x10, _x11, _x12) {
+        return _member_post.apply(this, arguments);
+      }
+
+      return member_post;
+    }()
+  }, {
+    key: "_execute",
+    value: function () {
+      var _execute2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee8(options) {
+        var runtimeOptions,
+            result,
+            _args8 = arguments;
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                runtimeOptions = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : {};
+
+                this._signalStatus({
+                  start: true,
+                  busy: true
+                }, runtimeOptions);
+
+                _context8.next = 4;
+                return fetch(options.url, options);
+
+              case 4:
+                result = _context8.sent;
+                return _context8.abrupt("return", this._handleResult(result, runtimeOptions));
+
+              case 6:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8, this);
+      }));
+
+      function _execute(_x13) {
+        return _execute2.apply(this, arguments);
+      }
+
+      return _execute;
+    }()
+  }, {
+    key: "_signalStatus",
+    value: function _signalStatus(status) {
+      var runtimeOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var statusFunction = runtimeOptions.status;
+
+      if (runtimeOptions.statusTo) {
+        statusFunction = function statusFunction(s) {
+          runtimeOptions.statusTo[0][runtimeOptions.statusTo[1]] = s;
         };
-      } else {
-        // inject component registration as beforeCreate hook
-        const existing = component.beforeCreate;
-        component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+      }
+
+      if (statusFunction) {
+        statusFunction(status);
       }
     }
-  }
+  }, {
+    key: "_buildUrl",
+    value: function _buildUrl(relative, options) {
+      options = Object.assign({}, this.defaultQuery, options);
+      var url = this.basePath;
 
-  return component;
-}
-/* style inject */
-function __vue_create_injector__() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
-  const isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-
-  return function addStyle(id, css) {
-    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
-
-    const group = isOldIE ? css.media || 'default' : id;
-    const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-    if (!style.ids.includes(id)) {
-      let code = css.source;
-      let index = style.ids.length;
-
-      style.ids.push(id);
-
-      if (isOldIE) {
-        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+      if (relative) {
+        url += relative;
       }
 
-      if (!style.element) {
-        const el = style.element = document.createElement('style');
-        el.type = 'text/css';
-
-        if (css.media) el.setAttribute('media', css.media);
-        if (isOldIE) {
-          el.setAttribute('data-group', group);
-          el.setAttribute('data-next-index', '0');
-        }
-
-        head.appendChild(el);
+      if (options) {
+        url += '?' + stringify(options);
       }
 
-      if (isOldIE) {
-        index = parseInt(style.element.getAttribute('data-next-index'));
-        style.element.setAttribute('data-next-index', index + 1);
-      }
-
-      if (style.element.styleSheet) {
-        style.parts.push(code);
-        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
-      } else {
-        const textNode = document.createTextNode(code);
-        const nodes = style.element.childNodes;
-        if (nodes[index]) style.element.removeChild(nodes[index]);
-        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
-      }
+      return url;
     }
-  };
-}
-/* style inject SSR */
+  }, {
+    key: "_handleResult",
+    value: function () {
+      var _handleResult2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee9(result) {
+        var runtimeOptions,
+            data,
+            errorInfo,
+            _args9 = arguments;
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                runtimeOptions = _args9.length > 1 && _args9[1] !== undefined ? _args9[1] : {};
 
-var ResourceStatus = __vue_normalize__$2({ render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, __vue_create_injector__, undefined);
+                if (!result.ok) {
+                  _context9.next = 16;
+                  break;
+                }
 
-//
-//
-//
-//
-//
+                _context9.prev = 2;
+                _context9.next = 5;
+                return result.json();
 
-var script$3 = {
-  props: {
-    label: {},
-    name: {
-      required: true
-    },
-    filter: {
-      default() {
-        return {};
+              case 5:
+                data = _context9.sent;
+
+                this._signalStatus({
+                  ready: true,
+                  busy: false
+                }, runtimeOptions);
+
+                return _context9.abrupt("return", data);
+
+              case 10:
+                _context9.prev = 10;
+                _context9.t0 = _context9["catch"](2);
+
+                this._signalStatus({
+                  ready: true,
+                  busy: false
+                }, runtimeOptions);
+
+                return _context9.abrupt("return", null);
+
+              case 14:
+                _context9.next = 29;
+                break;
+
+              case 16:
+                errorInfo = {
+                  status: result.status,
+                  statusText: result.statusText,
+                  body: null
+                };
+                _context9.prev = 17;
+                _context9.next = 20;
+                return result.json();
+
+              case 20:
+                errorInfo.body = _context9.sent;
+                _context9.next = 26;
+                break;
+
+              case 23:
+                _context9.prev = 23;
+                _context9.t1 = _context9["catch"](17);
+                errorInfo.body = null;
+
+              case 26:
+                this._signalStatus({
+                  error: errorInfo,
+                  busy: false
+                }, runtimeOptions);
+
+                if (!runtimeOptions.throwErrors) {
+                  _context9.next = 29;
+                  break;
+                }
+
+                throw new ResourceError('request failed', errorInfo);
+
+              case 29:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this, [[2, 10], [17, 23]]);
+      }));
+
+      function _handleResult(_x14) {
+        return _handleResult2.apply(this, arguments);
       }
-    },
-    seed: {}
-  },
-  created() {
-    try {
-      this._resource = this.$resource(this.name);
-    } catch (e) {
-      this.status = {
-        error: {
-          status: 'error',
-          error: e.message
-        }
-      };
-    }
-  },
-  async mounted() {
-    this.$setDottedProps();
-    await this.refresh();
-  },
-  data() {
-    return {
-      data: [],
-      status: {},
-      formStatus: {},
-      _resource: null
-    };
-  },
-  methods: {
-    sync_data() {
-      this.$emit('update:data', this.data);
-    },
-    get(id) {
-      return this._resource.get(id, { statusTo: [this, 'formStatus'], throwErrors: false, queryParams: this.filter });
-    },
-    async refresh() {
-      this.data = await this._resource.query(this.filter, { statusTo: [this, 'status'], throwErrors: false });
-      this.sync_data();
-    },
-    async create(data) {
-      let result = await this._resource.create(data, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-      if (this.formStatus.ready) {
-        let index = this.data.findIndex(item => item.id === result.id);
-        if (index >= 0) {
-          this.$set(this.data, index, result);
-        } else {
-          this.data.push(result);
-        }
-        this.sync_data();
-      }
-      return result;
-    },
-    async update(id, data) {
-      let result = await this._resource.update(id, data, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-      if (this.formStatus.ready) {
-        let index = this.data.findIndex(item => item.id === id);
-        this.$set(this.data, index, result);
-      }
-      return result;
-    },
-    async delete(id) {
-      let result = await this._resource.delete(id, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-      if (result === null || result === undefined || !result.error) {
-        let index = this.data.findIndex(item => item.id === id);
-        this.$delete(this.data, index);
-      }
-      this.sync_data();
-      return result;
-    },
-    member_get(id, action) {
-      return this._resource.member_get(id, action, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-    },
-    member_post(id, action, data) {
-      return this._resource.member_post(id, action, data, {
-        statusTo: [this, 'formStatus'],
-        throwErrors: false,
-        queryParams: this.filter
-      });
-    }
-  },
-  watch: {
-    status() {
-      this.$emit('update:status', this.status);
-    },
-    async seed() {
-      await this.refresh();
-    }
-  }
+
+      return _handleResult;
+    }()
+  }]);
+
+  return Resource;
+}();
+Resource.commonHeaders = {
+  'Content-Type': 'application/json'
 };
 
-/* script */
-const __vue_script__$3 = script$3;
+var ResourceCollection =
+/*#__PURE__*/
+function () {
+  function ResourceCollection() {
+    _classCallCheck(this, ResourceCollection);
 
-/* template */
-var __vue_render__$3 = function () {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", [_c("rr-resource-status", {
-    attrs: { status: _vm.status, label: _vm.label }
-  }), _c("rr-resource-status", {
-    attrs: { status: _vm.formStatus, label: _vm.label }
-  })], 1);
-};
-var __vue_staticRenderFns__$3 = [];
-__vue_render__$3._withStripped = true;
-
-/* style */
-const __vue_inject_styles__$3 = undefined;
-/* scoped */
-const __vue_scope_id__$3 = undefined;
-/* module identifier */
-const __vue_module_identifier__$3 = undefined;
-/* functional template */
-const __vue_is_functional_template__$3 = false;
-/* component normalizer */
-function __vue_normalize__$3(template, style, script, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
-  const component = (typeof script === 'function' ? script.options : script) || {};
-
-  // For security concerns, we use only base name in production mode.
-  component.__file = "/Users/piotr/Projects/vue-restful-resource/src/collection.vue";
-
-  if (!component.render) {
-    component.render = template.render;
-    component.staticRenderFns = template.staticRenderFns;
-    component._compiled = true;
-
-    if (functional) component.functional = true;
-  }
-
-  component._scopeId = scope;
-
-  return component;
-}
-/* style inject */
-
-/* style inject SSR */
-
-var Collection = __vue_normalize__$3({ render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
-
-class ResourceCollection {
-  constructor() {
     this.resources = {};
   }
-  register(name, basePath, options) {
-    if (options === undefined) {
-      options = {};
+
+  _createClass(ResourceCollection, [{
+    key: "register",
+    value: function register(name, basePath) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var resourceName = options.resourceName;
+      delete options.resourceName;
+
+      if (resourceName === undefined) {
+        resourceName = name;
+      }
+
+      this.resources[name] = new Resource(resourceName, basePath, options);
     }
-    let resourceName = options['resourceName'];
-    delete options.resourceName;
-    if (resourceName === undefined) {
-      resourceName = name;
+  }, {
+    key: "get",
+    value: function get(name) {
+      if (this.resources[name] !== undefined) {
+        return this.resources[name];
+      } else {
+        throw new Error("no resource registered as: ".concat(name));
+      }
     }
-    this.resources[name] = new Resource(resourceName, basePath, options);
+  }]);
+
+  return ResourceCollection;
+}();
+
+var VueResource =
+/*#__PURE__*/
+function () {
+  function VueResource() {
+    _classCallCheck(this, VueResource);
   }
-  get(name) {
-    if (this.resources[name] !== undefined) {
-      return this.resources[name];
-    } else {
-      throw new Error(`no resource registered as: ${name}`);
-    }
-  }
-}
 
-class VueResource {
-  constructor() {}
+  _createClass(VueResource, [{
+    key: "install",
+    value: function install(Vue, options) {
+      Vue.resources = new ResourceCollection();
 
-  install(Vue, options) {
-    Vue.resources = new ResourceCollection();
+      Vue.prototype.$resource = function (name) {
+        return Vue.resources.get(name);
+      };
 
-    Vue.prototype.$resource = name => {
-      return Vue.resources.get(name);
-    };
+      Vue.prototype.$setDottedProps = function () {
+        var _arr = Object.keys(this.$attrs);
 
-    Vue.prototype.$setDottedProps = function () {
-      for (let key of Object.keys(this.$attrs)) {
-        for (let pKey of this.$options._propKeys) {
-          let mr = key.match(`^${pKey}-([^.]+)$`);
-          if (mr) {
-            let subKey = mr[1];
-            if (this[pKey] === undefined) this[pKey] = {};
-            this[pKey][subKey] = this.$attrs[key];
-            delete this.$attrs[key];
+        for (var _i = 0; _i < _arr.length; _i++) {
+          var key = _arr[_i];
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = this.$options._propKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var pKey = _step.value;
+              var mr = key.match("^".concat(pKey, "-([^.]+)$"));
+
+              if (mr) {
+                var subKey = mr[1];
+                if (this[pKey] === undefined) this[pKey] = {};
+                this[pKey][subKey] = this.$attrs[key];
+                delete this.$attrs[key];
+              }
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
         }
-      }
-    };
-  }
-}
+      };
+    }
+  }]);
 
-// import Vue from 'vue'
+  return VueResource;
+}();
 
-function install(Vue, options) {
+var VueRestfulResource = function VueRestfulResource(Vue, options) {
   Vue.use(new VueResource());
   Vue.component('rr-model', Model);
   Vue.component('rr-collection', Collection);
   Vue.component('rr-resource-status', ResourceStatus);
   Vue.component('rr-model-error', ModelError);
-}
+};
 
-module.exports = install;
+export { VueRestfulResource, Model, ResourceStatus, Collection };

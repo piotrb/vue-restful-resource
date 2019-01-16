@@ -1,17 +1,52 @@
-import qs from 'qs'
+import * as qs from 'qs'
 
 class ResourceError extends Error {
-  constructor(message, errorInfo) {
+  errorInfo: any
+
+  constructor(message: string, errorInfo: any) {
     super(message)
     this.errorInfo = errorInfo
   }
 }
 
-export default class Resource {
+export type IdType = string | number
+export type QueryType = any
+export type DataType = { [key: string]: any }
+
+export interface ExecuteOptions {
+  url: string
+  method?: 'get' | 'post' | 'delete' | 'put'
+  body?: string
+  headers?: { [key: string]: any }
+}
+
+export interface ResourceOptions {
+  defaultQuery?: QueryType
+}
+
+export interface RuntimeOptions {
+  status?: (status: RequestStatus) => any
+  statusTo?: [any, string]
+  queryParams?: QueryType
+  throwErrors?: boolean
+}
+
+export interface RequestStatus {
+  start?: boolean
+  ready?: boolean
+  busy?: boolean
+  error?: any
+}
+
+export class Resource<T extends DataType> {
+  resourceName: string
+  basePath: string
+  defaultQuery: QueryType
+
   static commonHeaders = { 'Content-Type': 'application/json' }
 
-  constructor(resouceName, basePath, options) {
-    this.resouceName = resouceName
+  constructor(resouceName: string, basePath: string, options?: ResourceOptions) {
+    this.resourceName = resouceName
     this.basePath = basePath
     if (options) {
       this.defaultQuery = options.defaultQuery
@@ -20,18 +55,18 @@ export default class Resource {
     }
   }
 
-  async query(options, runtimeOptions) {
-    let url = this._buildUrl(null, options)
+  async query(options: QueryType, runtimeOptions: RuntimeOptions = {}): Promise<T[]> {
+    let url = this._buildUrl(undefined, options)
     return this._execute({ url: url }, runtimeOptions)
   }
 
-  async create(data, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams']
-    delete runtimeOptions['queryParams']
+  async create(data: T, runtimeOptions: RuntimeOptions): Promise<T> {
+    let queryParams = runtimeOptions.queryParams
+    delete runtimeOptions.queryParams
     let url = this._buildUrl(undefined, queryParams)
-    let body = {}
+    let body: DataType = {}
     data._ = '_'
-    body[this.resouceName] = data
+    body[this.resourceName] = data
     return this._execute(
       {
         url: url,
@@ -43,13 +78,13 @@ export default class Resource {
     )
   }
 
-  async update(id, data, runtimeOptions) {
+  async update(id: IdType, data: T, runtimeOptions: RuntimeOptions = {}): Promise<T> {
     let queryParams = runtimeOptions['queryParams']
     delete runtimeOptions['queryParams']
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
-    let body = {}
+    let url = this._buildUrl(`/${encodeURIComponent(String(id))}`, queryParams)
+    let body: DataType = {}
     data._ = '_'
-    body[this.resouceName] = data
+    body[this.resourceName] = data
     return this._execute(
       {
         url: url,
@@ -61,10 +96,10 @@ export default class Resource {
     )
   }
 
-  async delete(id, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams']
-    delete runtimeOptions['queryParams']
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
+  async delete(id: IdType, runtimeOptions: RuntimeOptions = {}): Promise<any> {
+    let queryParams = runtimeOptions.queryParams
+    delete runtimeOptions.queryParams
+    let url = this._buildUrl(`/${encodeURIComponent(String(id))}`, queryParams)
     return this._execute(
       {
         url: url,
@@ -75,10 +110,10 @@ export default class Resource {
     )
   }
 
-  async get(id, runtimeOptions) {
+  async get(id: IdType, runtimeOptions: RuntimeOptions = {}): Promise<T> {
     let queryParams = runtimeOptions['queryParams']
     delete runtimeOptions['queryParams']
-    let url = this._buildUrl(`/${encodeURIComponent(id)}`, queryParams)
+    let url = this._buildUrl(`/${encodeURIComponent(String(id))}`, queryParams)
     return this._execute(
       {
         url: url,
@@ -88,10 +123,10 @@ export default class Resource {
     )
   }
 
-  async member_get(id, action, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams']
-    delete runtimeOptions['queryParams']
-    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams)
+  async member_get(id: IdType, action: string, runtimeOptions: RuntimeOptions = {}): Promise<any> {
+    let queryParams = runtimeOptions.queryParams
+    delete runtimeOptions.queryParams
+    let url = this._buildUrl(`/${encodeURIComponent(String(id))}/${action}`, queryParams)
     return this._execute(
       {
         url: url,
@@ -101,10 +136,10 @@ export default class Resource {
     )
   }
 
-  async member_post(id, action, data, runtimeOptions) {
-    let queryParams = runtimeOptions['queryParams']
-    delete runtimeOptions['queryParams']
-    let url = this._buildUrl(`/${encodeURIComponent(id)}/${action}`, queryParams)
+  async member_post(id: IdType, action: string, data: DataType, runtimeOptions: RuntimeOptions = {}): Promise<any> {
+    let queryParams = runtimeOptions.queryParams
+    delete runtimeOptions.queryParams
+    let url = this._buildUrl(`/${encodeURIComponent(String(id))}/${action}`, queryParams)
     return this._execute(
       {
         url: url,
@@ -116,17 +151,17 @@ export default class Resource {
     )
   }
 
-  async _execute(options, runtimeOptions = {}) {
+  async _execute(options: ExecuteOptions, runtimeOptions: RuntimeOptions = {}) {
     this._signalStatus({ start: true, busy: true }, runtimeOptions)
     let result = await fetch(options.url, options)
     return this._handleResult(result, runtimeOptions)
   }
 
-  _signalStatus(status, runtimeOptions) {
+  private _signalStatus(status: RequestStatus, runtimeOptions: RuntimeOptions = {}) {
     let statusFunction = runtimeOptions.status
     if (runtimeOptions.statusTo) {
-      statusFunction = (s) => {
-        runtimeOptions.statusTo[0][runtimeOptions.statusTo[1]] = s
+      statusFunction = (s: RequestStatus) => {
+        runtimeOptions.statusTo![0][runtimeOptions.statusTo![1]] = s
       }
     }
     if (statusFunction) {
@@ -134,7 +169,7 @@ export default class Resource {
     }
   }
 
-  _buildUrl(relative, options) {
+  private _buildUrl(relative?: string, options?: QueryType) {
     options = Object.assign({}, this.defaultQuery, options)
     let url = this.basePath
     if (relative) {
@@ -146,7 +181,7 @@ export default class Resource {
     return url
   }
 
-  async _handleResult(result, runtimeOptions) {
+  private async _handleResult(result: Response, runtimeOptions: RuntimeOptions = {}) {
     if (result.ok) {
       try {
         let data = await result.json()

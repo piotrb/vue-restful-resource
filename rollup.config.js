@@ -1,22 +1,28 @@
-import VuePlugin from 'rollup-plugin-vue'
 import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
+import typescript from 'rollup-plugin-typescript2'
+
+// const globals = {
+//   // lodash: 'lodash',
+//   // qs: 'qs',
+//   // vue: 'vue',
+//   'vue-property-decorator': 'vue-property-decorator',
+// }
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   plugins: [
-    VuePlugin(),
-    /* VuePluginOptions */
+    typescript(),
     babel({
-      plugins: ['transform-class-properties'],
-    }),
-    commonjs({
-      extensions: ['.js', '.vue'],
+      presets: [['@babel/preset-env', { targets: { browsers: '> 0.1%' } }]],
+      plugins: ['transform-vue-jsx'],
+      extensions: ['.ts', '.tsx'],
     }),
   ],
-  external: ['qs', 'vue'],
+  // external: Object.keys(globals),
   output: {
     file: 'dist/bundle.js',
-    format: 'cjs',
+    format: 'esm',
+    exports: 'named',
+    // globals: globals,
   },
 }

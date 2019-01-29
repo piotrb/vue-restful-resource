@@ -1507,4 +1507,4 @@ var VueRestfulResource = function VueRestfulResource(Vue, options) {
   Vue.component('rr-model-error', ModelError);
 };
 
-export { VueRestfulResource, Model, ResourceStatus, Collection };
+export { VueRestfulResource, Model, ResourceStatus, Collection, Resource };

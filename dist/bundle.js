@@ -270,6 +270,13 @@ function (_tsx$Component) {
             errors: this.status.error.body
           }
         });
+      } else if (this.status.error.status == 401) {
+        return h("b-alert", {
+          attrs: {
+            show: true,
+            variant: "danger"
+          }
+        }, [this.status.error.body.error.message]);
       } else if (this.status.error.status == 500) {
         if (this.status.error.body) {
           return h("b-alert", {

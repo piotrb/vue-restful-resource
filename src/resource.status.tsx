@@ -23,6 +23,12 @@ export class ResourceStatus extends tsx.Component<ResourceStatusProps> {
   renderError() {
     if (this.status.error.status == 422) {
       return <ModelError errors={this.status.error.body} />
+    } else if (this.status.error.status == 401) {
+      return (
+        <b-alert show variant="danger">
+          {this.status.error.body.error.message}
+        </b-alert>
+      )
     } else if (this.status.error.status == 500) {
       if (this.status.error.body) {
         return (
